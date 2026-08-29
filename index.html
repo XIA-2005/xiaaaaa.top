@@ -3,46 +3,133 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="xiaaaaa.top — XIA-2005 的个人主页，开源小工具与项目。">
-  <title>XIA-2005 · xiaaaaa.top</title>
+  <meta name="description" content="xiaaaaa.top — XIA-2005 的个人主页。小栗帽应援主题，开源小工具与项目。">
+  <title>XIA-2005 · 小栗帽应援站 · xiaaaaa.top</title>
   <style>
-    :root{--blue:#2563eb;--blue2:#1d4ed8;--ink:#172033;--muted:#667085;--line:#e6eaf0;--soft:#f5f8ff;--green:#087a4b}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f7f9fc;color:var(--ink);font:16px/1.7 system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
-    a{color:var(--blue)}.wrap{width:min(920px,calc(100% - 32px));margin:auto}.hero{padding:72px 0 54px;background:linear-gradient(145deg,#edf4ff,#fff 56%,#eefbf6)}
-    .pill{display:inline-block;padding:5px 12px;border:1px solid #bfd3ff;border-radius:999px;background:#fff;color:var(--blue2);font-size:13px;font-weight:700}
-    h1{margin:18px 0 12px;font-size:clamp(34px,7vw,58px);line-height:1.12;letter-spacing:-1.5px}.lead{max-width:700px;margin:0;color:var(--muted);font-size:18px}
-    .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 20px;border-radius:10px;text-decoration:none;font-weight:750}
-    .primary{background:var(--blue);color:#fff;box-shadow:0 8px 22px #2563eb35}.primary:hover{background:var(--blue2)}.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}.secondary:hover{border-color:#c6d2e6}
-    main{padding:42px 0 72px}.card{margin:0 0 20px;padding:26px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 6px 24px #152b5b0b}h2{margin:0 0 18px;font-size:25px}h3{margin:22px 0 7px;font-size:18px}
-    .project{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin:14px 0 0;padding:16px 18px;border:1px solid var(--line);border-radius:12px;background:var(--soft)}
-    .project b{font-size:17px}.project p{margin:4px 0 0;color:var(--muted);font-size:15px}
+    :root{
+      --red:#e8373f;--red-dark:#c8242c;--ink:#3a3d45;--muted:#8b8f98;
+      --line:#e3e5ea;--silver:#eceef1;--card:#ffffff;--gold:#f5b52e;
+    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth}
+    body{margin:0;background:#f4f5f7;color:var(--ink);font:16px/1.8 "PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif}
+    a{color:var(--red-dark)}
+    .wrap{width:min(960px,calc(100% - 32px));margin:auto}
+
+    /* ===== 赛马娘经典红白斜纹 ===== */
+    .stripe{height:10px;background:repeating-linear-gradient(-45deg,var(--red) 0 18px,#fff 18px 36px)}
+
+    /* ===== Hero ===== */
+    .hero{position:relative;overflow:hidden;background:linear-gradient(165deg,#e9ebef 0%,#f6f7f9 45%,#fdf3f3 100%);padding:84px 0 64px}
+    .hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+      background:repeating-linear-gradient(105deg,transparent 0 90px,#ffffff88 90px 96px);}
+    .hero .wrap{position:relative}
+    .ribbon{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;
+      padding:7px 22px;font-size:14px;font-weight:800;letter-spacing:2px;
+      clip-path:polygon(0 0,100% 0,calc(100% - 12px) 50%,100% 100%,0 100%,12px 50%)}
+    h1{margin:22px 0 10px;font-size:clamp(36px,7vw,62px);line-height:1.15;letter-spacing:-1px;font-weight:900}
+    h1 .grey{background:linear-gradient(120deg,#7d818b,#b7bcc4 55%,#8d919a);-webkit-background-clip:text;background-clip:text;color:transparent}
+    h1 .red{color:var(--red)}
+    .lead{max-width:640px;margin:0;color:var(--muted);font-size:18px}
+    .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:8px;
+      text-decoration:none;font-weight:800;border:none;cursor:pointer;font-size:15px;transition:transform .12s ease,box-shadow .12s ease}
+    .btn:hover{transform:translateY(-2px)}
+    .primary{background:var(--red);color:#fff;box-shadow:0 8px 20px #e8373f40;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%)}
+    .primary:hover{background:var(--red-dark)}
+    .secondary{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+
+    /* 说话气泡 */
+    .bubble-zone{margin-top:30px;display:flex;align-items:flex-end;gap:14px}
+    .horse{font-size:58px;line-height:1;cursor:pointer;user-select:none;transition:transform .15s}
+    .horse:active{transform:scale(.9)}
+    .bubble{position:relative;background:#fff;border:2px solid var(--ink);border-radius:14px;padding:12px 18px;
+      max-width:420px;font-weight:700;box-shadow:4px 4px 0 #3a3d4522}
+    .bubble::after{content:"";position:absolute;left:-12px;bottom:14px;border:8px solid transparent;
+      border-right-color:#fff;border-left:none}
+    .bubble small{display:block;color:var(--muted);font-weight:400;font-size:12px}
+
+    /* ===== 通用卡片 ===== */
+    main{padding:52px 0 72px}
+    .sec-title{display:inline-block;background:var(--red);color:#fff;font-size:20px;font-weight:900;
+      padding:8px 26px 8px 18px;margin:0 0 20px;clip-path:polygon(0 0,100% 0,calc(100% - 14px) 100%,0 100%);letter-spacing:1px}
+    .card{margin:0 0 22px;padding:28px;background:var(--card);border:1px solid var(--line);border-radius:14px;
+      box-shadow:0 6px 24px #2a2d3a0a}
+    h2{margin:0 0 16px;font-size:24px}h3{margin:20px 0 6px;font-size:17px}
+    ol,ul{padding-left:24px}
+    code{padding:2px 6px;border-radius:5px;background:#eef0f4;font-family:Consolas,monospace}
+
+    /* ===== 能力面板（赛马娘风） ===== */
+    .stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+    .stat{padding:14px 12px;border:1px solid var(--line);border-radius:10px;background:#fafbfc;text-align:center}
+    .stat .name{font-size:13px;color:var(--muted);font-weight:700}
+    .stat .num{font-size:26px;font-weight:900;color:var(--ink);font-family:Consolas,monospace}
+    .stat .bar{height:8px;border-radius:4px;background:#e8eaee;overflow:hidden;margin-top:8px}
+    .stat .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:4px}
+    .stat-tip{color:var(--muted);font-size:13px;margin:12px 0 0}
+
+    /* ===== 项目卡 ===== */
+    .project{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px;
+      margin:16px 0 0;padding:18px 20px;border:2px solid var(--line);border-radius:12px;background:#fafbfc;
+      border-left:6px solid var(--red)}
+    .project b{font-size:18px}
+    .project p{margin:5px 0 0;color:var(--muted);font-size:15px}
     .tags{margin:10px 0 0;display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0}
-    .tags li{padding:3px 10px;border-radius:999px;background:#eef2f7;color:var(--muted);font-size:13px}
-    .links{list-style:none;padding:0;margin:0}.links li{padding:9px 0;border-bottom:1px dashed var(--line)}.links li:last-child{border-bottom:none}
-    .meta{color:var(--muted);font-size:14px}.footer{padding:28px 0;border-top:1px solid var(--line);color:var(--muted);text-align:center;font-size:14px}
-    @media(max-width:560px){.hero{padding-top:48px}.btn{width:100%}.card{padding:20px}}
+    .tags li{padding:3px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--muted);font-size:13px}
+
+    /* ===== 投喂 ===== */
+    .feed-zone{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+    .feed-btn{font-size:17px;padding:14px 28px;background:var(--red);color:#fff;border:none;border-radius:999px;
+      font-weight:900;cursor:pointer;box-shadow:0 6px 16px #e8373f40;transition:transform .1s}
+    .feed-btn:active{transform:scale(.94)}
+    .feed-count{font-size:30px;font-weight:900;font-family:Consolas,monospace;color:var(--red)}
+    .feed-msg{color:var(--muted);font-weight:700}
+
+    /* ===== 链接列表 ===== */
+    .links{list-style:none;padding:0;margin:0}
+    .links li{padding:10px 0;border-bottom:1px dashed var(--line)}
+    .links li:last-child{border-bottom:none}
+
+    .footer{padding:30px 0;border-top:1px solid var(--line);color:var(--muted);text-align:center;font-size:13px;line-height:2}
+    @media(max-width:640px){
+      .hero{padding-top:56px}
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .btn{width:100%}
+      .bubble{max-width:100%}
+      .card{padding:20px}
+    }
   </style>
 </head>
 <body>
+  <div class="stripe"></div>
+
   <header class="hero">
     <div class="wrap">
-      <span class="pill">xiaaaaa.top</span>
-      <h1>嗨，我是 XIA 👋</h1>
-      <p class="lead">一名喜欢写小工具的开发者。这里发布我的开源项目和作品，一切以「把重复劳动交给程序」为目标。</p>
+      <span class="ribbon">🐎 小栗帽应援中</span>
+      <h1>你好，我是 <span class="grey">XIA</span><span class="red">.</span></h1>
+      <p class="lead">一名喜欢写小工具的开发者。像小栗帽一样——吃饱饱、跑全力，把重复劳动甩在身后。这里发布我的开源项目。</p>
       <div class="actions">
-        <a class="btn primary" href="https://github.com/XIA-2005">⭐ 我的 GitHub</a>
+        <a class="btn primary" href="https://github.com/XIA-2005">⭐ GitHub 主页</a>
         <a class="btn secondary" href="#projects">看看项目 ↓</a>
+      </div>
+
+      <div class="bubble-zone">
+        <div class="horse" id="horse" title="点我说话！">🐴</div>
+        <div class="bubble" id="bubble">
+          肚子饿了的话，可跑不快哦！<small>—— 小栗帽（点击左侧马马换一句）</small>
+        </div>
       </div>
     </div>
   </header>
 
+  <div class="stripe"></div>
+
   <main class="wrap">
     <section class="card" id="projects">
-      <h2>项目</h2>
+      <span class="sec-title">出道战 · 项目</span>
       <div class="project">
         <div>
           <b>预推免填表助手</b>
-          <p>Edge / Chrome 浏览器扩展（Manifest V3），辅助填写高校预推免、夏令营报名表。个人档案只保存在本机浏览器中，不自动提交，不处理验证码与登录密码。</p>
+          <p>推免赛道的强力应援！Edge / Chrome 浏览器扩展（Manifest V3），辅助填写高校预推免、夏令营报名表。个人档案只保存在本机浏览器中，不自动提交，不处理验证码与登录密码。</p>
           <ul class="tags"><li>浏览器扩展</li><li>TypeScript</li><li>本地离线</li><li>免费开源</li></ul>
         </div>
         <div class="actions">
@@ -53,14 +140,82 @@
     </section>
 
     <section class="card">
-      <h2>找到我</h2>
+      <span class="sec-title">能力面板</span>
+      <div class="stats">
+        <div class="stat"><div class="name">速度</div><div class="num">950</div><div class="bar"><i style="width:95%"></i></div></div>
+        <div class="stat"><div class="name">耐力</div><div class="num">780</div><div class="bar"><i style="width:78%"></i></div></div>
+        <div class="stat"><div class="name">力量</div><div class="num">880</div><div class="bar"><i style="width:88%"></i></div></div>
+        <div class="stat"><div class="name">根性</div><div class="num">999</div><div class="bar"><i style="width:99%"></i></div></div>
+        <div class="stat"><div class="name">智力</div><div class="num">720</div><div class="bar"><i style="width:72%"></i></div></div>
+      </div>
+      <p class="stat-tip">※ 速度＝写代码，耐力＝改 bug，力量＝干饭，根性＝ deadline 前的爆发，智力＝还没有解锁上限。</p>
+    </section>
+
+    <section class="card">
+      <span class="sec-title">食堂 · 投喂</span>
+      <div class="feed-zone">
+        <button class="feed-btn" id="feedBtn">🍚 投喂一份饭</button>
+        <div>
+          <div>今天已经投喂 <span class="feed-count" id="feedCount">0</span> 份</div>
+          <div class="feed-msg" id="feedMsg">小栗帽正盯着饭碗等待中……</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <span class="sec-title">应援团 · 找到我</span>
       <ul class="links">
         <li>🧑‍💻 GitHub：<a href="https://github.com/XIA-2005">github.com/XIA-2005</a></li>
-        <li>🐛 提问题或建议：到对应项目的 <a href="https://github.com/XIA-2005/tuimian-autofill/issues">GitHub Issues</a> 提交</li>
+        <li>🐛 问题与建议：到 <a href="https://github.com/XIA-2005/tuimian-autofill/issues">GitHub Issues</a> 提交，字段报告不包含个人信息</li>
       </ul>
     </section>
   </main>
 
-  <footer class="footer"><div class="wrap">© 2026 XIA-2005 · xiaaaaa.top · 托管于 GitHub Pages</div></footer>
+  <div class="stripe"></div>
+  <footer class="footer">
+    © 2026 XIA-2005 · xiaaaaa.top · 托管于 GitHub Pages<br>
+    本站为个人粉丝向主页，与《赛马娘 Pretty Derby》及 Cygames 官方无关 🐎💨
+  </footer>
+
+  <script>
+    // 小栗帽语录（粉丝向原创风味文本）
+    var quotes = [
+      "肚子饿了的话，可跑不快哦！",
+      "今天的饭……可以来三倍份吗？",
+      "看着吧，这就是怪马的一口气超车！",
+      "训练完了要好好吃饭，好好休息！",
+      "不用顾忌，全程全力是我的跑法！",
+      "又到了饭点！今天也冲鸭！",
+      "只要吃饱了，就没有跑不完的赛道。"
+    ];
+    var feedLines = [
+      "小栗帽正盯着饭碗等待中……",
+      "啊呜——！好吃！",
+      "还要还要！再来一份！",
+      "这就是大胃王的实力！",
+      "吃得饱饱的，明天也全力奔跑！",
+      "投喂 +1，根性 +100！"
+    ];
+    var qi = 0;
+    var bubbleEl = document.getElementById('bubble');
+    document.getElementById('horse').addEventListener('click', function () {
+      qi = (qi + 1) % quotes.length;
+      bubbleEl.innerHTML = quotes[qi] + '<small>—— 小栗帽（点击左侧马马换一句）</small>';
+    });
+
+    // 投喂计数（只存本机，不上传）
+    var countEl = document.getElementById('feedCount');
+    var msgEl = document.getElementById('feedMsg');
+    var KEY = 'xiaaaaa_feed_' + new Date().toISOString().slice(0, 10);
+    var n = parseInt(localStorage.getItem(KEY) || '0', 10);
+    function render() {
+      countEl.textContent = n;
+      msgEl.textContent = n === 0 ? feedLines[0] : feedLines[Math.min(Math.ceil(n / 3), feedLines.length - 1)];
+    }
+    document.getElementById('feedBtn').addEventListener('click', function () {
+      n++; localStorage.setItem(KEY, n); render();
+    });
+    render();
+  </script>
 </body>
 </html>

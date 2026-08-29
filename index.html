@@ -12,7 +12,16 @@
     }
     *{box-sizing:border-box}html{scroll-behavior:smooth}
     body{margin:0;background:var(--paper);color:var(--ink);
-      font:16px/1.85 "PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif;
+      font:16px/1.85 "PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif}
+    /* 毛玻璃底：模糊的封面拼贴层 */
+    .bg-glass{position:fixed;inset:0;z-index:-1;pointer-events:none;
+      background-image:
+        url("assets/covers/c03.jpg"),url("assets/covers/c11.jpg"),url("assets/covers/c19.jpg"),
+        url("assets/covers/c27.jpg"),url("assets/covers/c35.jpg"),url("assets/covers/c07.jpg");
+      background-size:340px auto,300px auto,320px auto,340px auto,300px auto,320px auto;
+      background-position:2% 8%,42% 32%,78% 12%,12% 68%,52% 88%,86% 62%;
+      background-repeat:no-repeat;filter:blur(14px) saturate(.9);opacity:.16}
+    .bg-dots{position:fixed;inset:0;z-index:-1;pointer-events:none;
       background-image:radial-gradient(circle,#00000010 1px,transparent 1.2px);background-size:14px 14px}
     a{color:#1d5a8f;font-weight:800}
     .wrap{width:min(1060px,calc(100% - 36px));margin:auto}
@@ -54,10 +63,11 @@
       .btn{width:100%}
     }
 
-    /* ===== 漫画格区块 ===== */
+    /* ===== 毛玻璃漫画格区块 ===== */
     main{padding:56px 0 70px}
-    .card{position:relative;margin:0 0 30px;padding:30px;background:var(--white);color:var(--ink);
-      border:3px solid #000;box-shadow:10px 10px 0 #b9b6ae}
+    .card{position:relative;margin:0 0 30px;padding:30px;color:var(--ink);
+      background:#fdfcfab8;border:3px solid #000;box-shadow:10px 10px 0 #00000030;
+      -webkit-backdrop-filter:blur(14px) saturate(1.25);backdrop-filter:blur(14px) saturate(1.25)}
     .tab{position:absolute;top:-19px;left:22px;background:var(--red);color:#fff;font-weight:900;font-size:17px;
       padding:6px 22px;border:3px solid #000;letter-spacing:2px;box-shadow:4px 4px 0 #00000088}
     ol,ul{padding-left:22px}
@@ -96,6 +106,17 @@
     .feed-img img{display:block;width:100%;height:auto}
     @media(max-width:860px){.feed-grid{grid-template-columns:1fr}}
 
+    /* 图集：毛玻璃画框 + 相继浮现 */
+    .covers{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:14px}
+    .cover{margin:0;border:3px solid #000;background:#fff;box-shadow:6px 6px 0 #00000030;overflow:hidden;
+      opacity:0;transform:translateY(30px) scale(.95) rotate(.5deg);
+      transition:opacity .7s ease,transform .7s cubic-bezier(.2,.75,.25,1)}
+    .cover.on{opacity:1;transform:none}
+    .cover:hover{transform:translateY(-4px);box-shadow:10px 12px 0 #00000038;transition:transform .15s}
+    .cover img{display:block;width:100%;height:auto}
+    @media(max-width:900px){.covers{grid-template-columns:repeat(4,1fr)}}
+    @media(max-width:560px){.covers{grid-template-columns:repeat(3,1fr);gap:8px}}
+
     /* 链接 */
     .links{list-style:none;padding:0;margin:0}
     .links li{padding:10px 2px;border-bottom:2px dashed var(--line)}
@@ -114,7 +135,7 @@
     <div class="wrap">
       <a class="logo" href="#">XIAAAAA<b>.TOP</b></a>
       <div class="topnav">
-        <a href="#projects">项目</a><a href="#articles">文章</a><a href="#feed">食堂</a><a href="#links">链接</a>
+        <a href="#projects">项目</a><a href="#articles">文章</a><a href="#gallery">图集</a><a href="#feed">食堂</a><a href="#links">链接</a>
       </div>
     </div>
   </nav>
@@ -156,6 +177,51 @@
         <li><span class="date">2025.04</span><a href="https://blog.csdn.net/Xjb200512/article/details/145416679" target="_blank">PytorchGPU版本</a></li>
       </ul>
       <div class="more"><a class="mini-btn plain" href="https://blog.csdn.net/Xjb200512?type=blog" target="_blank">更多文章 →</a></div>
+    </section>
+
+    <section class="card" id="gallery">
+      <span class="tab">图集 · 表纸</span>
+      <p style="margin:6px 0 0;color:#56544e">《芦毛灰姑娘》周刊青年 Jump 封面收藏 · 全 38 张，一路疾驰的证明。</p>
+      <div class="covers">
+        <figure class="cover"><img src="assets/covers/c01.jpg" alt="シンデレラグレイ 封面 1" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c02.jpg" alt="シンデレラグレイ 封面 2" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c03.jpg" alt="シンデレラグレイ 封面 3" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c04.jpg" alt="シンデレラグレイ 封面 4" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c05.jpg" alt="シンデレラグレイ 封面 5" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c06.jpg" alt="シンデレラグレイ 封面 6" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c07.jpg" alt="シンデレラグレイ 封面 7" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c08.jpg" alt="シンデレラグレイ 封面 8" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c09.jpg" alt="シンデレラグレイ 封面 9" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c10.jpg" alt="シンデレラグレイ 封面 10" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c11.jpg" alt="シンデレラグレイ 封面 11" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c12.jpg" alt="シンデレラグレイ 封面 12" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c13.jpg" alt="シンデレラグレイ 封面 13" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c14.jpg" alt="シンデレラグレイ 封面 14" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c15.jpg" alt="シンデレラグレイ 封面 15" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c16.jpg" alt="シンデレラグレイ 封面 16" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c17.jpg" alt="シンデレラグレイ 封面 17" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c18.jpg" alt="シンデレラグレイ 封面 18" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c19.jpg" alt="シンデレラグレイ 封面 19" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c20.jpg" alt="シンデレラグレイ 封面 20" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c21.jpg" alt="シンデレラグレイ 封面 21" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c22.jpg" alt="シンデレラグレイ 封面 22" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c23.jpg" alt="シンデレラグレイ 封面 23" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c24.jpg" alt="シンデレラグレイ 封面 24" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c25.jpg" alt="シンデレラグレイ 封面 25" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c26.jpg" alt="シンデレラグレイ 封面 26" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c27.jpg" alt="シンデレラグレイ 封面 27" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c28.jpg" alt="シンデレラグレイ 封面 28" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c29.jpg" alt="シンデレラグレイ 封面 29" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c30.jpg" alt="シンデレラグレイ 封面 30" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c31.jpg" alt="シンデレラグレイ 封面 31" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c32.jpg" alt="シンデレラグレイ 封面 32" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c33.jpg" alt="シンデレラグレイ 封面 33" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c34.jpg" alt="シンデレラグレイ 封面 34" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c35.jpg" alt="シンデレラグレイ 封面 35" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c36.jpg" alt="シンデレラグレイ 封面 36" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c37.jpg" alt="シンデレラグレイ 封面 37" loading="lazy"></figure>
+        <figure class="cover"><img src="assets/covers/c38.jpg" alt="シンデレラグレイ 封面 38" loading="lazy"></figure>
+      </div>
     </section>
 
     <section class="card" id="feed">
@@ -212,6 +278,23 @@
       n++; localStorage.setItem(KEY, n); render();
     });
     render();
-  </script>
+    // 封面相继浮现：进入视野时按批次交错延迟
+    var covers = document.querySelectorAll('.cover');
+    if ('IntersectionObserver' in window) {
+      var batch = 0;
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            en.target.style.transitionDelay = (batch++ % 6) * 90 + 'ms';
+            en.target.classList.add('on');
+            io.unobserve(en.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+      covers.forEach(function (c) { io.observe(c); });
+    } else {
+      covers.forEach(function (c) { c.classList.add('on'); });
+    }
+    </script>
 </body>
 </html>

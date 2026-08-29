@@ -21,9 +21,9 @@
     .bg-float img{position:absolute;left:var(--x);top:var(--y);width:var(--w);opacity:0;rotate:var(--r,0deg);
       border:3px solid #000;box-shadow:6px 6px 0 #00000026;transform:translateY(28px) scale(.95);
       animation:coverIn .8s cubic-bezier(.2,.75,.25,1) var(--d) forwards,
-                coverBob 7s ease-in-out calc(var(--d) + 1.6s) infinite alternate}
+                coverBob 6s ease-in-out calc(var(--d) + 1.2s) infinite alternate}
     @keyframes coverIn{to{opacity:var(--o);transform:translateY(0) scale(1)}}
-    @keyframes coverBob{from{translate:0 0}to{translate:0 -18px}}
+    @keyframes coverBob{from{translate:0 0}to{translate:var(--bx,0px) var(--by,-38px)}}
     @media(max-width:640px){.bg-float img{width:calc(var(--w) * .42)}}
     .bg-dots{position:fixed;inset:0;z-index:0;pointer-events:none;
       background-image:radial-gradient(circle,#00000010 1px,transparent 1.2px);background-size:14px 14px}
@@ -126,44 +126,44 @@
 </head>
 <body>
 <div class="bg-float" aria-hidden="true">
-    <img src="assets/covers/c01.webp" style="--x:4.5%;--y:1.0%;--w:140px;--r:-2.0deg;--d:-0.04s;--o:0.39" alt="">
-    <img src="assets/covers/c02.webp" style="--x:24.4%;--y:2.3%;--w:158px;--r:-0.6deg;--d:0.05s;--o:0.41" alt="">
-    <img src="assets/covers/c03.webp" style="--x:40.7%;--y:1.0%;--w:132px;--r:1.7deg;--d:0.15s;--o:0.43" alt="">
-    <img src="assets/covers/c04.webp" style="--x:58.8%;--y:1.0%;--w:124px;--r:2.1deg;--d:0.20s;--o:0.43" alt="">
-    <img src="assets/covers/c05.webp" style="--x:75.8%;--y:1.0%;--w:140px;--r:-3.2deg;--d:0.29s;--o:0.42" alt="">
-    <img src="assets/covers/c06.webp" style="--x:95.3%;--y:1.0%;--w:124px;--r:1.8deg;--d:0.36s;--o:0.5" alt="">
-    <img src="assets/covers/c07.webp" style="--x:1.7%;--y:17.6%;--w:166px;--r:0.9deg;--d:0.45s;--o:0.45" alt="">
-    <img src="assets/covers/c08.webp" style="--x:24.1%;--y:14.8%;--w:132px;--r:2.2deg;--d:0.53s;--o:0.48" alt="">
-    <img src="assets/covers/c09.webp" style="--x:44.6%;--y:16.7%;--w:148px;--r:1.1deg;--d:0.57s;--o:0.42" alt="">
-    <img src="assets/covers/c10.webp" style="--x:56.2%;--y:16.0%;--w:166px;--r:1.2deg;--d:0.66s;--o:0.4" alt="">
-    <img src="assets/covers/c11.webp" style="--x:80.7%;--y:15.4%;--w:148px;--r:-1.8deg;--d:0.75s;--o:0.46" alt="">
-    <img src="assets/covers/c12.webp" style="--x:93.9%;--y:16.3%;--w:124px;--r:-2.2deg;--d:0.78s;--o:0.42" alt="">
-    <img src="assets/covers/c13.webp" style="--x:0.4%;--y:31.0%;--w:158px;--r:3.0deg;--d:0.87s;--o:0.46" alt="">
-    <img src="assets/covers/c14.webp" style="--x:20.7%;--y:35.0%;--w:148px;--r:-2.9deg;--d:0.93s;--o:0.47" alt="">
-    <img src="assets/covers/c15.webp" style="--x:41.0%;--y:34.0%;--w:148px;--r:3.2deg;--d:1.01s;--o:0.41" alt="">
-    <img src="assets/covers/c16.webp" style="--x:64.9%;--y:32.7%;--w:124px;--r:2.0deg;--d:1.11s;--o:0.4" alt="">
-    <img src="assets/covers/c17.webp" style="--x:74.5%;--y:33.7%;--w:158px;--r:-3.5deg;--d:1.16s;--o:0.5" alt="">
-    <img src="assets/covers/c18.webp" style="--x:97.3%;--y:35.3%;--w:124px;--r:1.4deg;--d:1.22s;--o:0.49" alt="">
-    <img src="assets/covers/c19.webp" style="--x:5.8%;--y:49.5%;--w:140px;--r:-3.1deg;--d:1.31s;--o:0.43" alt="">
-    <img src="assets/covers/c20.webp" style="--x:26.8%;--y:50.1%;--w:140px;--r:3.8deg;--d:1.39s;--o:0.44" alt="">
-    <img src="assets/covers/c21.webp" style="--x:36.3%;--y:48.7%;--w:166px;--r:0.1deg;--d:1.44s;--o:0.42" alt="">
-    <img src="assets/covers/c22.webp" style="--x:55.7%;--y:50.5%;--w:158px;--r:3.3deg;--d:1.53s;--o:0.44" alt="">
-    <img src="assets/covers/c23.webp" style="--x:73.9%;--y:47.2%;--w:140px;--r:-2.1deg;--d:1.59s;--o:0.45" alt="">
-    <img src="assets/covers/c24.webp" style="--x:92.4%;--y:49.3%;--w:124px;--r:3.8deg;--d:1.67s;--o:0.4" alt="">
-    <img src="assets/covers/c25.webp" style="--x:4.8%;--y:65.8%;--w:132px;--r:-1.9deg;--d:1.76s;--o:0.43" alt="">
-    <img src="assets/covers/c26.webp" style="--x:18.6%;--y:63.6%;--w:166px;--r:1.5deg;--d:1.83s;--o:0.43" alt="">
-    <img src="assets/covers/c27.webp" style="--x:42.5%;--y:62.6%;--w:158px;--r:-0.4deg;--d:1.88s;--o:0.39" alt="">
-    <img src="assets/covers/c28.webp" style="--x:54.1%;--y:63.6%;--w:158px;--r:-2.2deg;--d:1.95s;--o:0.46" alt="">
-    <img src="assets/covers/c29.webp" style="--x:75.2%;--y:65.6%;--w:140px;--r:-3.4deg;--d:2.03s;--o:0.46" alt="">
-    <img src="assets/covers/c30.webp" style="--x:93.9%;--y:61.3%;--w:158px;--r:0.6deg;--d:2.10s;--o:0.44" alt="">
-    <img src="assets/covers/c31.webp" style="--x:2.0%;--y:76.4%;--w:166px;--r:-0.6deg;--d:2.18s;--o:0.44" alt="">
-    <img src="assets/covers/c32.webp" style="--x:24.3%;--y:79.6%;--w:166px;--r:-3.2deg;--d:2.25s;--o:0.42" alt="">
-    <img src="assets/covers/c33.webp" style="--x:44.6%;--y:77.3%;--w:132px;--r:0.3deg;--d:2.31s;--o:0.4" alt="">
-    <img src="assets/covers/c34.webp" style="--x:59.0%;--y:80.8%;--w:124px;--r:-0.5deg;--d:2.41s;--o:0.45" alt="">
-    <img src="assets/covers/c35.webp" style="--x:73.3%;--y:81.5%;--w:124px;--r:3.8deg;--d:2.49s;--o:0.48" alt="">
-    <img src="assets/covers/c36.webp" style="--x:93.3%;--y:78.6%;--w:132px;--r:2.9deg;--d:2.56s;--o:0.4" alt="">
-    <img src="assets/covers/c37.webp" style="--x:-2.5%;--y:93.4%;--w:148px;--r:-1.7deg;--d:2.63s;--o:0.47" alt="">
-    <img src="assets/covers/c38.webp" style="--x:24.9%;--y:94.9%;--w:148px;--r:-2.8deg;--d:2.68s;--o:0.5" alt="">
+    <img src="assets/covers/c01.webp" style="--x:4.5%;--y:1.0%;--w:140px;--r:-2.0deg;--d:-0.04s;--o:0.39";--bx:7px;--by:-49px alt="">
+    <img src="assets/covers/c02.webp" style="--x:24.4%;--y:2.3%;--w:158px;--r:-0.6deg;--d:0.05s;--o:0.41";--bx:-5px;--by:-34px alt="">
+    <img src="assets/covers/c03.webp" style="--x:40.7%;--y:1.0%;--w:132px;--r:1.7deg;--d:0.15s;--o:0.43";--bx:21px;--by:-30px alt="">
+    <img src="assets/covers/c04.webp" style="--x:58.8%;--y:1.0%;--w:124px;--r:2.1deg;--d:0.20s;--o:0.43";--bx:10px;--by:44px alt="">
+    <img src="assets/covers/c05.webp" style="--x:75.8%;--y:1.0%;--w:140px;--r:-3.2deg;--d:0.29s;--o:0.42";--bx:-17px;--by:40px alt="">
+    <img src="assets/covers/c06.webp" style="--x:95.3%;--y:1.0%;--w:124px;--r:1.8deg;--d:0.36s;--o:0.5";--bx:17px;--by:-52px alt="">
+    <img src="assets/covers/c07.webp" style="--x:1.7%;--y:17.6%;--w:166px;--r:0.9deg;--d:0.45s;--o:0.45";--bx:2px;--by:35px alt="">
+    <img src="assets/covers/c08.webp" style="--x:24.1%;--y:14.8%;--w:132px;--r:2.2deg;--d:0.53s;--o:0.48";--bx:6px;--by:-43px alt="">
+    <img src="assets/covers/c09.webp" style="--x:44.6%;--y:16.7%;--w:148px;--r:1.1deg;--d:0.57s;--o:0.42";--bx:-12px;--by:-37px alt="">
+    <img src="assets/covers/c10.webp" style="--x:56.2%;--y:16.0%;--w:166px;--r:1.2deg;--d:0.66s;--o:0.4";--bx:-15px;--by:34px alt="">
+    <img src="assets/covers/c11.webp" style="--x:80.7%;--y:15.4%;--w:148px;--r:-1.8deg;--d:0.75s;--o:0.46";--bx:15px;--by:32px alt="">
+    <img src="assets/covers/c12.webp" style="--x:93.9%;--y:16.3%;--w:124px;--r:-2.2deg;--d:0.78s;--o:0.42";--bx:2px;--by:-33px alt="">
+    <img src="assets/covers/c13.webp" style="--x:0.4%;--y:31.0%;--w:158px;--r:3.0deg;--d:0.87s;--o:0.46";--bx:-9px;--by:-51px alt="">
+    <img src="assets/covers/c14.webp" style="--x:20.7%;--y:35.0%;--w:148px;--r:-2.9deg;--d:0.93s;--o:0.47";--bx:4px;--by:-32px alt="">
+    <img src="assets/covers/c15.webp" style="--x:41.0%;--y:34.0%;--w:148px;--r:3.2deg;--d:1.01s;--o:0.41";--bx:-9px;--by:-42px alt="">
+    <img src="assets/covers/c16.webp" style="--x:64.9%;--y:32.7%;--w:124px;--r:2.0deg;--d:1.11s;--o:0.4";--bx:-1px;--by:-31px alt="">
+    <img src="assets/covers/c17.webp" style="--x:74.5%;--y:33.7%;--w:158px;--r:-3.5deg;--d:1.16s;--o:0.5";--bx:-22px;--by:-43px alt="">
+    <img src="assets/covers/c18.webp" style="--x:97.3%;--y:35.3%;--w:124px;--r:1.4deg;--d:1.22s;--o:0.49";--bx:2px;--by:-45px alt="">
+    <img src="assets/covers/c19.webp" style="--x:5.8%;--y:49.5%;--w:140px;--r:-3.1deg;--d:1.31s;--o:0.43";--bx:-21px;--by:-37px alt="">
+    <img src="assets/covers/c20.webp" style="--x:26.8%;--y:50.1%;--w:140px;--r:3.8deg;--d:1.39s;--o:0.44";--bx:-15px;--by:-49px alt="">
+    <img src="assets/covers/c21.webp" style="--x:36.3%;--y:48.7%;--w:166px;--r:0.1deg;--d:1.44s;--o:0.42";--bx:-15px;--by:-48px alt="">
+    <img src="assets/covers/c22.webp" style="--x:55.7%;--y:50.5%;--w:158px;--r:3.3deg;--d:1.53s;--o:0.44";--bx:-10px;--by:-40px alt="">
+    <img src="assets/covers/c23.webp" style="--x:73.9%;--y:47.2%;--w:140px;--r:-2.1deg;--d:1.59s;--o:0.45";--bx:-17px;--by:34px alt="">
+    <img src="assets/covers/c24.webp" style="--x:92.4%;--y:49.3%;--w:124px;--r:3.8deg;--d:1.67s;--o:0.4";--bx:-21px;--by:-46px alt="">
+    <img src="assets/covers/c25.webp" style="--x:4.8%;--y:65.8%;--w:132px;--r:-1.9deg;--d:1.76s;--o:0.43";--bx:14px;--by:45px alt="">
+    <img src="assets/covers/c26.webp" style="--x:18.6%;--y:63.6%;--w:166px;--r:1.5deg;--d:1.83s;--o:0.43";--bx:-10px;--by:-43px alt="">
+    <img src="assets/covers/c27.webp" style="--x:42.5%;--y:62.6%;--w:158px;--r:-0.4deg;--d:1.88s;--o:0.39";--bx:3px;--by:36px alt="">
+    <img src="assets/covers/c28.webp" style="--x:54.1%;--y:63.6%;--w:158px;--r:-2.2deg;--d:1.95s;--o:0.46";--bx:-17px;--by:52px alt="">
+    <img src="assets/covers/c29.webp" style="--x:75.2%;--y:65.6%;--w:140px;--r:-3.4deg;--d:2.03s;--o:0.46";--bx:-13px;--by:35px alt="">
+    <img src="assets/covers/c30.webp" style="--x:93.9%;--y:61.3%;--w:158px;--r:0.6deg;--d:2.10s;--o:0.44";--bx:-20px;--by:-31px alt="">
+    <img src="assets/covers/c31.webp" style="--x:2.0%;--y:76.4%;--w:166px;--r:-0.6deg;--d:2.18s;--o:0.44";--bx:13px;--by:51px alt="">
+    <img src="assets/covers/c32.webp" style="--x:24.3%;--y:79.6%;--w:166px;--r:-3.2deg;--d:2.25s;--o:0.42";--bx:-13px;--by:38px alt="">
+    <img src="assets/covers/c33.webp" style="--x:44.6%;--y:77.3%;--w:132px;--r:0.3deg;--d:2.31s;--o:0.4";--bx:14px;--by:-31px alt="">
+    <img src="assets/covers/c34.webp" style="--x:59.0%;--y:80.8%;--w:124px;--r:-0.5deg;--d:2.41s;--o:0.45";--bx:3px;--by:-37px alt="">
+    <img src="assets/covers/c35.webp" style="--x:73.3%;--y:81.5%;--w:124px;--r:3.8deg;--d:2.49s;--o:0.48";--bx:17px;--by:-46px alt="">
+    <img src="assets/covers/c36.webp" style="--x:93.3%;--y:78.6%;--w:132px;--r:2.9deg;--d:2.56s;--o:0.4";--bx:1px;--by:51px alt="">
+    <img src="assets/covers/c37.webp" style="--x:-2.5%;--y:93.4%;--w:148px;--r:-1.7deg;--d:2.63s;--o:0.47";--bx:15px;--by:48px alt="">
+    <img src="assets/covers/c38.webp" style="--x:24.9%;--y:94.9%;--w:148px;--r:-2.8deg;--d:2.68s;--o:0.5";--bx:-17px;--by:-41px alt="">
   </div>
   <div class="bg-dots" aria-hidden="true"></div>
   <nav class="topbar">

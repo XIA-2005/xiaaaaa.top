@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="xiaaaaa.top — XIA-2005 的个人主页，开源小工具与项目。">
+  <title>XIA-2005 · xiaaaaa.top</title>
+  <style>
+    :root{--blue:#2563eb;--blue2:#1d4ed8;--ink:#172033;--muted:#667085;--line:#e6eaf0;--soft:#f5f8ff;--green:#087a4b}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f7f9fc;color:var(--ink);font:16px/1.7 system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+    a{color:var(--blue)}.wrap{width:min(920px,calc(100% - 32px));margin:auto}.hero{padding:72px 0 54px;background:linear-gradient(145deg,#edf4ff,#fff 56%,#eefbf6)}
+    .pill{display:inline-block;padding:5px 12px;border:1px solid #bfd3ff;border-radius:999px;background:#fff;color:var(--blue2);font-size:13px;font-weight:700}
+    h1{margin:18px 0 12px;font-size:clamp(34px,7vw,58px);line-height:1.12;letter-spacing:-1.5px}.lead{max-width:700px;margin:0;color:var(--muted);font-size:18px}
+    .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 20px;border-radius:10px;text-decoration:none;font-weight:750}
+    .primary{background:var(--blue);color:#fff;box-shadow:0 8px 22px #2563eb35}.primary:hover{background:var(--blue2)}.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}.secondary:hover{border-color:#c6d2e6}
+    main{padding:42px 0 72px}.card{margin:0 0 20px;padding:26px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 6px 24px #152b5b0b}h2{margin:0 0 18px;font-size:25px}h3{margin:22px 0 7px;font-size:18px}
+    .project{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin:14px 0 0;padding:16px 18px;border:1px solid var(--line);border-radius:12px;background:var(--soft)}
+    .project b{font-size:17px}.project p{margin:4px 0 0;color:var(--muted);font-size:15px}
+    .tags{margin:10px 0 0;display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0}
+    .tags li{padding:3px 10px;border-radius:999px;background:#eef2f7;color:var(--muted);font-size:13px}
+    .links{list-style:none;padding:0;margin:0}.links li{padding:9px 0;border-bottom:1px dashed var(--line)}.links li:last-child{border-bottom:none}
+    .meta{color:var(--muted);font-size:14px}.footer{padding:28px 0;border-top:1px solid var(--line);color:var(--muted);text-align:center;font-size:14px}
+    @media(max-width:560px){.hero{padding-top:48px}.btn{width:100%}.card{padding:20px}}
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <span class="pill">xiaaaaa.top</span>
+      <h1>嗨，我是 XIA 👋</h1>
+      <p class="lead">一名喜欢写小工具的开发者。这里发布我的开源项目和作品，一切以「把重复劳动交给程序」为目标。</p>
+      <div class="actions">
+        <a class="btn primary" href="https://github.com/XIA-2005">⭐ 我的 GitHub</a>
+        <a class="btn secondary" href="#projects">看看项目 ↓</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card" id="projects">
+      <h2>项目</h2>
+      <div class="project">
+        <div>
+          <b>预推免填表助手</b>
+          <p>Edge / Chrome 浏览器扩展（Manifest V3），辅助填写高校预推免、夏令营报名表。个人档案只保存在本机浏览器中，不自动提交，不处理验证码与登录密码。</p>
+          <ul class="tags"><li>浏览器扩展</li><li>TypeScript</li><li>本地离线</li><li>免费开源</li></ul>
+        </div>
+        <div class="actions">
+          <a class="btn primary" href="/tuimian-autofill/">项目主页 →</a>
+          <a class="btn secondary" href="https://github.com/XIA-2005/tuimian-autofill">源码</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>找到我</h2>
+      <ul class="links">
+        <li>🧑‍💻 GitHub：<a href="https://github.com/XIA-2005">github.com/XIA-2005</a></li>
+        <li>🐛 提问题或建议：到对应项目的 <a href="https://github.com/XIA-2005/tuimian-autofill/issues">GitHub Issues</a> 提交</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="wrap">© 2026 XIA-2005 · xiaaaaa.top · 托管于 GitHub Pages</div></footer>
+</body>
+</html>

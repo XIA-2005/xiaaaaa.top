@@ -3,69 +3,63 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="xiaaaaa.top — XIA-2005 的个人主页。以漫画《芦毛灰姑娘》小栗帽为主题的黑白漫画风应援站。">
+  <meta name="description" content="xiaaaaa.top — XIA-2005 的个人主页。以《芦毛灰姑娘》小栗帽为主题的应援站：开源项目与嵌入式技术文章。">
   <title>XIA-2005 · 芦毛灰姑娘应援站 · xiaaaaa.top</title>
   <style>
     :root{
-      --ink:#141414;--ink2:#2a2a2a;--paper:#f4f2ec;--white:#fdfcfa;
-      --grey:#8a8880;--line:#dcd8cd;
+      --navy:#0b1420;--navy2:#101c2e;--blue:#4a9ad4;--red:#c73a34;
+      --ink:#141414;--paper:#f4f2ec;--white:#fdfcfa;--grey:#8b98a8;--line:#dcd8cd;
     }
     *{box-sizing:border-box}html{scroll-behavior:smooth}
-    body{margin:0;background:var(--paper);color:var(--ink);
+    body{margin:0;background:var(--navy);color:#eef2f7;
       font:16px/1.85 "PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif;
-      background-image:radial-gradient(circle,#00000010 1px,transparent 1.2px);background-size:14px 14px}
-    a{color:var(--ink);font-weight:800}
+      background-image:radial-gradient(circle,#ffffff0a 1px,transparent 1.2px);background-size:14px 14px}
+    a{color:#8ec3ea;font-weight:800}
     .wrap{width:min(1060px,calc(100% - 36px));margin:auto}
 
     /* ===== 顶栏 ===== */
-    .topbar{position:sticky;top:0;z-index:50;background:#141414ee;border-bottom:3px solid #000;backdrop-filter:blur(6px)}
+    .topbar{position:sticky;top:0;z-index:50;background:#0b1420ee;border-bottom:2px solid var(--blue);backdrop-filter:blur(6px)}
     .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
     .logo{font-weight:900;letter-spacing:1px;font-size:17px;text-decoration:none;color:#fff}
+    .logo b{color:var(--blue)}
     .topnav{display:flex;gap:22px}
-    .topnav a{color:#b9b6ae;text-decoration:none;font-weight:700;font-size:14px}
+    .topnav a{color:#aebccb;text-decoration:none;font-weight:700;font-size:14px}
     .topnav a:hover{color:#fff}
     @media(max-width:640px){.topnav{gap:12px}.topnav a{font-size:12px}}
 
-    /* ===== Hero ===== */
-    .hero{position:relative;overflow:hidden;padding:64px 0 72px;border-bottom:3px solid #000;background:var(--paper)}
-    .hero::before{content:"";position:absolute;inset:0;pointer-events:none;
-      background-image:radial-gradient(circle,#00000014 1.1px,transparent 1.3px);background-size:11px 11px}
-    .hero .wrap{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center}
-    .side-tag{position:absolute;left:-56px;top:8px;writing-mode:vertical-rl;background:var(--ink);color:#fff;
-      font-weight:900;font-size:15px;letter-spacing:6px;padding:18px 8px;border:2px solid #000;box-shadow:5px 5px 0 #b9b6ae}
-    .hero .wrap>div:nth-child(2){margin-left:14px}
-    .kicker{display:inline-block;background:var(--ink);color:#fff;font-weight:900;font-size:13px;letter-spacing:3px;
-      padding:6px 14px;border:2px solid #000;box-shadow:4px 4px 0 #b9b6ae}
-    h1{margin:22px 0 8px;font-size:clamp(40px,6.5vw,72px);line-height:1.08;font-weight:900;letter-spacing:1px;color:var(--ink)}
-    .sub{margin:0;color:#56544e;font-size:17px;max-width:560px}
-    .sub b{color:var(--ink)}
-    .jp{margin:14px 0 0;color:#b9b6ae;font-weight:900;font-size:clamp(18px,2.4vw,26px);letter-spacing:4px}
-    .actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:26px}
+    /* ===== Hero：蓝色动画海报全幅背景 ===== */
+    .hero{position:relative;overflow:hidden;border-bottom:3px solid #000;
+      background:var(--navy2) url("assets/cg-blue.jpg") no-repeat center 30%;background-size:cover;min-height:560px;
+      display:flex;align-items:center}
+    .hero::before{content:"";position:absolute;inset:0;
+      background:linear-gradient(100deg,#0b1420f2 0%,#0b1420d9 34%,#0b14207a 58%,#0b142026 82%,#0b142040 100%)}
+    .hero .wrap{position:relative;z-index:1;width:min(1060px,calc(100% - 36px));padding:84px 0}
+    .kicker{display:inline-block;background:var(--red);color:#fff;font-weight:900;font-size:13px;letter-spacing:3px;
+      padding:6px 14px;border:2px solid #000;box-shadow:4px 4px 0 #00000088}
+    h1{margin:22px 0 6px;font-size:clamp(36px,5.6vw,64px);line-height:1.12;font-weight:900;color:#fff;
+      text-shadow:3px 3px 0 #00000088}
+    h1 em{font-style:normal;color:var(--blue)}
+    .quote-by{margin:10px 0 0;color:#c6d4e4;font-size:15px;letter-spacing:2px}
+    .jp{margin:16px 0 0;color:#ffffff5a;font-weight:900;font-size:clamp(15px,2vw,20px);letter-spacing:4px}
+    .actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:28px}
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 24px;text-decoration:none;
-      font-weight:900;font-size:15px;border:2px solid #000;cursor:pointer;transition:transform .12s}
+      font-weight:900;font-size:15px;border:2px solid #000;transition:transform .12s}
     .btn:hover{transform:translate(-2px,-2px)}
-    .primary{background:var(--ink);color:#fff;box-shadow:6px 6px 0 #b9b6ae}
-    .secondary{background:var(--white);color:var(--ink);box-shadow:6px 6px 0 #b9b6ae}
-
-    /* 主视觉面板 */
-    .panel-wrap{position:relative}
-    .panel-wrap::before{content:"";position:absolute;inset:-9%;z-index:0;border-radius:50%;
-      background:repeating-conic-gradient(from 12deg at 50% 50%,transparent 0 7deg,#00000009 7deg 8deg)}
-    .panel{position:relative;z-index:1;margin:0;border:4px solid #000;background:#fff;
-      box-shadow:14px 14px 0 #b9b6ae;transform:rotate(2deg);overflow:hidden}
-    .panel img{display:block;width:100%;height:auto}
-    .panel figcaption{position:absolute;left:0;bottom:0;background:#141414d9;color:#fff;font-size:12px;padding:5px 12px;letter-spacing:1px}
-    .star{position:absolute;z-index:2;top:-14px;right:-6px;width:86px;height:86px;background:var(--ink);
-      clip-path:polygon(50% 0,63% 34%,98% 36%,70% 58%,80% 92%,50% 72%,20% 92%,30% 58%,2% 36%,37% 34%);
-      display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:13px;
-      transform:rotate(12deg);filter:drop-shadow(4px 4px 0 #b9b6ae)}
+    .primary{background:var(--blue);color:#fff;box-shadow:6px 6px 0 #000000aa}
+    .secondary{background:#fdfcfad9;color:#fff;box-shadow:6px 6px 0 #000000aa}
+    .secondary{color:var(--ink)}
+    @media(max-width:860px){
+      .hero{background-position:38% top;min-height:520px}
+      .hero::before{background:linear-gradient(180deg,#0b1420cc 0%,#0b1420e8 55%,#0b1420f2 100%)}
+      .btn{width:100%}
+    }
 
     /* ===== 漫画格区块 ===== */
     main{padding:56px 0 70px}
-    .card{position:relative;margin:0 0 30px;padding:30px;background:var(--white);color:var(--ink2);
-      border:3px solid #000;box-shadow:10px 10px 0 #b9b6ae}
-    .tab{position:absolute;top:-19px;left:22px;background:var(--ink);color:#fff;font-weight:900;font-size:17px;
-      padding:6px 22px;border:3px solid #000;letter-spacing:2px;box-shadow:4px 4px 0 #b9b6ae}
+    .card{position:relative;margin:0 0 30px;padding:30px;background:var(--paper);color:var(--ink);
+      border:3px solid #000;box-shadow:10px 10px 0 #00000066}
+    .tab{position:absolute;top:-19px;left:22px;background:var(--red);color:#fff;font-weight:900;font-size:17px;
+      padding:6px 22px;border:3px solid #000;letter-spacing:2px;box-shadow:4px 4px 0 #00000088}
     ol,ul{padding-left:22px}
     code{padding:2px 6px;border-radius:4px;background:#ecebe4;font-family:Consolas,monospace}
 
@@ -77,31 +71,40 @@
     .tags li{padding:2px 12px;border:1.5px solid #000;background:var(--paper);font-size:12px;font-weight:700}
     .mini-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
     .mini-btn{display:inline-flex;padding:9px 18px;font-size:13px;font-weight:900;text-decoration:none;border:2px solid #000}
-    .mini-btn.red{background:var(--ink);color:#fff}
+    .mini-btn.blue{background:var(--navy);color:#fff}
     .mini-btn.plain{background:#fff;color:var(--ink)}
 
-    /* 投喂 */
+    /* CSDN 文章列表 */
+    .articles{list-style:none;padding:0;margin:14px 0 0}
+    .articles li{display:flex;gap:14px;align-items:baseline;padding:12px 4px;border-bottom:2px dashed var(--line)}
+    .articles li:last-child{border-bottom:none}
+    .date{flex:none;font-family:Consolas,monospace;font-weight:900;font-size:13px;color:#fff;background:var(--navy);
+      padding:2px 10px;border:2px solid #000}
+    .articles a{color:var(--ink);text-decoration:none;font-weight:800}
+    .articles a:hover{text-decoration:underline;text-decoration-color:var(--red)}
+    .more{margin-top:14px;text-align:right}
+
+    /* 投喂 + 插画 */
+    .feed-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:center;margin-top:14px}
     .feed-zone{display:flex;flex-wrap:wrap;align-items:center;gap:18px}
-    .feed-btn{font-size:16px;padding:14px 28px;background:var(--ink);color:#fff;border:3px solid #000;
-      font-weight:900;cursor:pointer;box-shadow:6px 6px 0 #b9b6ae;transition:transform .1s}
-    .feed-btn:active{transform:translate(4px,4px);box-shadow:2px 2px 0 #b9b6ae}
-    .feed-count{font-size:32px;font-weight:900;font-family:Consolas,monospace}
+    .feed-btn{font-size:16px;padding:14px 28px;background:var(--red);color:#fff;border:3px solid #000;
+      font-weight:900;cursor:pointer;box-shadow:6px 6px 0 #00000088;transition:transform .1s}
+    .feed-btn:active{transform:translate(4px,4px);box-shadow:2px 2px 0 #00000088}
+    .feed-count{font-size:32px;font-weight:900;font-family:Consolas,monospace;color:var(--red)}
     .feed-msg{color:#77756d;font-weight:700}
+    .feed-img{border:3px solid #000;box-shadow:8px 8px 0 #00000055;overflow:hidden;transform:rotate(1.5deg)}
+    .feed-img img{display:block;width:100%;height:auto}
+    @media(max-width:860px){.feed-grid{grid-template-columns:1fr}}
 
     /* 链接 */
     .links{list-style:none;padding:0;margin:0}
     .links li{padding:10px 2px;border-bottom:2px dashed var(--line)}
     .links li:last-child{border-bottom:none}
-    .links a{color:var(--ink)}
+    .links a{color:var(--navy)}
 
-    .footer{padding:34px 0;border-top:3px solid #000;background:#141414;color:#b9b6ae;text-align:center;font-size:12.5px;line-height:2.1}
+    .footer{padding:34px 0;border-top:3px solid #000;background:#070d16;color:#aebccb;text-align:center;font-size:12.5px;line-height:2.1}
     .footer b{color:#fff}
     @media(max-width:860px){
-      .hero .wrap{grid-template-columns:1fr;gap:28px}
-      .side-tag{display:none}
-      .hero .wrap>div:nth-child(2){margin-left:0}
-      .panel{transform:none;margin-top:8px}
-      .btn{width:100%}
       .card{padding:22px}
     }
   </style>
@@ -109,32 +112,22 @@
 <body>
   <nav class="topbar">
     <div class="wrap">
-      <a class="logo" href="#">XIAAAAA.TOP</a>
+      <a class="logo" href="#">XIAAAAA<b>.TOP</b></a>
       <div class="topnav">
-        <a href="#projects">出道战</a><a href="#feed">食堂</a><a href="#links">链接</a><a href="https://blog.csdn.net/Xjb200512?type=blog" target="_blank">CSDN 博客 ↗</a>
+        <a href="#projects">出道战</a><a href="#articles">文章</a><a href="#feed">食堂</a><a href="#links">链接</a>
       </div>
     </div>
   </nav>
 
   <header class="hero">
     <div class="wrap">
-      <div class="side-tag">芦毛の怪馬</div>
-      <div>
-        <span class="kicker">芦毛灰姑娘 · 应援站</span>
-        <h1>你好，<br>我是 XIA。</h1>
-        <p class="sub">像小栗帽一样——<b>吃饱饱，跑全力</b>。一名喜欢写小工具的开发者，把重复劳动甩在身后。这里发布我的开源项目。</p>
-        <p class="jp">—— 世界が、来る。</p>
-        <div class="actions">
-          <a class="btn primary" href="https://github.com/XIA-2005">⭐ GitHub 主页</a>
-          <a class="btn secondary" href="#projects">看看项目 ↓</a>
-        </div>
-      </div>
-      <div class="panel-wrap">
-        <div class="star">GO!</div>
-        <figure class="panel">
-          <img src="assets/oguri-manga.jpg" alt="小栗帽 漫画风主视觉">
-          <figcaption>オグリキャップ</figcaption>
-        </figure>
+      <span class="kicker">芦毛灰姑娘 · 应援站</span>
+      <h1>Eclipse first,<br><em>the rest nowhere.</em></h1>
+      <p class="quote-by">—— 你好，我是 XIA。这里是属于我的赛道。</p>
+      <p class="jp">向青春「奔跑」芦毛灰姑娘的故事、</p>
+      <div class="actions">
+        <a class="btn primary" href="https://github.com/XIA-2005">⭐ GitHub 主页</a>
+        <a class="btn secondary" href="#projects">看看项目 ↓</a>
       </div>
     </div>
   </header>
@@ -147,20 +140,37 @@
         <p>推免赛道的强力应援！Edge / Chrome 浏览器扩展（Manifest V3），辅助填写高校预推免、夏令营报名表。个人档案只保存在本机浏览器中，不自动提交，不处理验证码与登录密码。</p>
         <ul class="tags"><li>浏览器扩展</li><li>TypeScript</li><li>本地离线</li><li>免费开源</li></ul>
         <div class="mini-actions">
-          <a class="mini-btn red" href="/tuimian-autofill/">项目主页 →</a>
+          <a class="mini-btn blue" href="/tuimian-autofill/">项目主页 →</a>
           <a class="mini-btn plain" href="https://github.com/XIA-2005/tuimian-autofill">源码</a>
         </div>
       </div>
     </section>
 
+    <section class="card" id="articles">
+      <span class="tab">文章 · CSDN</span>
+      <p style="margin:6px 0 0;color:#56544e">嵌入式 / 竞赛 / 深度学习的踩坑记录，更新在 <a href="https://blog.csdn.net/Xjb200512?type=blog" target="_blank">CSDN 博客</a>：</p>
+      <ul class="articles">
+        <li><span class="date">2026.02</span><a href="https://blog.csdn.net/Xjb200512/article/details/157405029" target="_blank">【机创_①基于HAL库的单个步进电机PWM控制(张大头驱动板)】</a></li>
+        <li><span class="date">2025.08</span><a href="https://blog.csdn.net/Xjb200512/article/details/149822567" target="_blank">调节步进电机速度时调PSC和调ARR的区别</a></li>
+        <li><span class="date">2025.06</span><a href="https://blog.csdn.net/Xjb200512/article/details/148978418" target="_blank">STM32F407控制单个张大头闭环步进电机讲解与梯形加减速（HAL库）</a></li>
+        <li><span class="date">2025.05</span><a href="https://blog.csdn.net/Xjb200512/article/details/147905115" target="_blank">YOLOv5推理代码解析</a></li>
+        <li><span class="date">2025.05</span><a href="https://blog.csdn.net/Xjb200512/article/details/147774433" target="_blank">SR触发器为什么能够消抖</a></li>
+        <li><span class="date">2025.04</span><a href="https://blog.csdn.net/Xjb200512/article/details/145416679" target="_blank">PytorchGPU版本</a></li>
+      </ul>
+      <div class="more"><a class="mini-btn plain" href="https://blog.csdn.net/Xjb200512?type=blog" target="_blank">更多文章 →</a></div>
+    </section>
+
     <section class="card" id="feed">
       <span class="tab">食堂 · 投喂</span>
-      <div class="feed-zone">
-        <button class="feed-btn" id="feedBtn">🍚 投喂一份饭</button>
-        <div>
-          <div>今天已经投喂 <span class="feed-count" id="feedCount">0</span> 份</div>
-          <div class="feed-msg" id="feedMsg">小栗帽正盯着饭碗等待中……</div>
+      <div class="feed-grid">
+        <div class="feed-zone">
+          <button class="feed-btn" id="feedBtn">🍚 投喂一份饭</button>
+          <div>
+            <div>今天已经投喂 <span class="feed-count" id="feedCount">0</span> 份</div>
+            <div class="feed-msg" id="feedMsg">小栗帽正盯着饭碗等待中……</div>
+          </div>
         </div>
+        <div class="feed-img"><img src="assets/cg-thanks.jpg" alt="800万部感謝 · 小栗帽"></div>
       </div>
     </section>
 
@@ -177,7 +187,7 @@
   <footer class="footer">
     <div class="wrap">
       <b>© 2026 XIA-2005 · xiaaaaa.top</b> · 托管于 GitHub Pages<br>
-      页面主视觉图 © 久住太陽・杉浦理史&amp;Pita・伊藤隼之介／集英社・ウマ娘 シンデレラグレイ製作委員会・Cygames, Inc.<br>
+      页面图片 © 久住太陽・杉浦理史&amp;Pita・伊藤隼之介／集英社・ウマ娘 シンデレラグレイ製作委員会・Cygames, Inc.<br>
       本站为个人粉丝向主页，与《赛马娘 Pretty Derby》《芦毛灰姑娘》官方无关 🐎💨
     </div>
   </footer>

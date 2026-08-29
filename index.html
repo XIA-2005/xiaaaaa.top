@@ -19,7 +19,7 @@
       background:linear-gradient(180deg,#f4f2ec1f,#f4f2ec59 55%,#f4f2ec26)}
     .bg-float img{position:absolute;left:var(--x);top:var(--y);width:var(--w);opacity:0;
       border:3px solid #000;box-shadow:6px 6px 0 #00000026;transform:translateY(28px) scale(.95);
-      animation:coverIn 1.6s cubic-bezier(.2,.75,.25,1) var(--d) forwards,
+      animation:coverIn 1s cubic-bezier(.2,.75,.25,1) var(--d) forwards,
                 coverBob 7s ease-in-out calc(var(--d) + 1.6s) infinite alternate}
     @keyframes coverIn{to{opacity:var(--o);transform:translateY(0) scale(1)}}
     @keyframes coverBob{from{translate:0 0}to{translate:0 -18px}}
@@ -124,21 +124,35 @@
   </style>
 </head>
 <body>
-  <div class="bg-float" aria-hidden="true">
-    <img src="assets/covers/c01.jpg" style="--x:2%;--y:12%;--w:170px;--d:.2s;--o:.45" alt="">
-    <img src="assets/covers/c03.jpg" style="--x:86%;--y:8%;--w:150px;--d:.9s;--o:.40" alt="">
-    <img src="assets/covers/c05.jpg" style="--x:70%;--y:30%;--w:160px;--d:1.6s;--o:.42" alt="">
-    <img src="assets/covers/c07.jpg" style="--x:4%;--y:40%;--w:155px;--d:2.3s;--o:.45" alt="">
-    <img src="assets/covers/c09.jpg" style="--x:90%;--y:46%;--w:165px;--d:3.0s;--o:.40" alt="">
-    <img src="assets/covers/c11.jpg" style="--x:30%;--y:55%;--w:150px;--d:3.7s;--o:.38" alt="">
-    <img src="assets/covers/c13.jpg" style="--x:55%;--y:16%;--w:150px;--d:4.4s;--o:.40" alt="">
-    <img src="assets/covers/c16.jpg" style="--x:12%;--y:70%;--w:160px;--d:5.1s;--o:.45" alt="">
-    <img src="assets/covers/c19.jpg" style="--x:74%;--y:64%;--w:155px;--d:5.8s;--o:.40" alt="">
-    <img src="assets/covers/c22.jpg" style="--x:40%;--y:82%;--w:160px;--d:6.5s;--o:.42" alt="">
-    <img src="assets/covers/c25.jpg" style="--x:92%;--y:84%;--w:150px;--d:7.2s;--o:.38" alt="">
-    <img src="assets/covers/c28.jpg" style="--x:6%;--y:88%;--w:155px;--d:7.9s;--o:.42" alt="">
-    <img src="assets/covers/c31.jpg" style="--x:60%;--y:94%;--w:150px;--d:8.6s;--o:.40" alt="">
-    <img src="assets/covers/c35.jpg" style="--x:24%;--y:24%;--w:150px;--d:9.3s;--o:.38" alt="">
+<div class="bg-float" aria-hidden="true">
+    <img src="assets/covers/c01.jpg" style="--x:1%;--y:2%;--w:162px;--d:0.0s;--o:0.43" alt="">
+    <img src="assets/covers/c03.jpg" style="--x:9%;--y:8%;--w:140px;--d:0.28s;--o:0.39" alt="">
+    <img src="assets/covers/c04.jpg" style="--x:21%;--y:11%;--w:148px;--d:0.56s;--o:0.35" alt="">
+    <img src="assets/covers/c05.jpg" style="--x:36%;--y:13%;--w:140px;--d:0.84s;--o:0.37" alt="">
+    <img src="assets/covers/c07.jpg" style="--x:49%;--y:16%;--w:140px;--d:1.12s;--o:0.46" alt="">
+    <img src="assets/covers/c08.jpg" style="--x:57%;--y:17%;--w:170px;--d:1.4s;--o:0.47" alt="">
+    <img src="assets/covers/c09.jpg" style="--x:73%;--y:23%;--w:162px;--d:1.68s;--o:0.35" alt="">
+    <img src="assets/covers/c10.jpg" style="--x:82%;--y:22%;--w:170px;--d:1.96s;--o:0.46" alt="">
+    <img src="assets/covers/c11.jpg" style="--x:91%;--y:28%;--w:148px;--d:2.24s;--o:0.42" alt="">
+    <img src="assets/covers/c12.jpg" style="--x:3%;--y:30%;--w:170px;--d:2.52s;--o:0.45" alt="">
+    <img src="assets/covers/c13.jpg" style="--x:10%;--y:31%;--w:170px;--d:2.8s;--o:0.42" alt="">
+    <img src="assets/covers/c14.jpg" style="--x:22%;--y:36%;--w:140px;--d:3.08s;--o:0.42" alt="">
+    <img src="assets/covers/c16.jpg" style="--x:33%;--y:41%;--w:140px;--d:3.36s;--o:0.43" alt="">
+    <img src="assets/covers/c17.jpg" style="--x:48%;--y:44%;--w:162px;--d:3.64s;--o:0.45" alt="">
+    <img src="assets/covers/c19.jpg" style="--x:60%;--y:47%;--w:162px;--d:3.92s;--o:0.39" alt="">
+    <img src="assets/covers/c20.jpg" style="--x:70%;--y:47%;--w:148px;--d:4.2s;--o:0.35" alt="">
+    <img src="assets/covers/c21.jpg" style="--x:83%;--y:53%;--w:162px;--d:4.48s;--o:0.46" alt="">
+    <img src="assets/covers/c22.jpg" style="--x:94%;--y:55%;--w:155px;--d:4.76s;--o:0.43" alt="">
+    <img src="assets/covers/c23.jpg" style="--x:-1%;--y:55%;--w:170px;--d:5.04s;--o:0.4" alt="">
+    <img src="assets/covers/c25.jpg" style="--x:15%;--y:60%;--w:148px;--d:5.32s;--o:0.47" alt="">
+    <img src="assets/covers/c26.jpg" style="--x:24%;--y:61%;--w:140px;--d:5.6s;--o:0.45" alt="">
+    <img src="assets/covers/c27.jpg" style="--x:37%;--y:66%;--w:155px;--d:5.88s;--o:0.44" alt="">
+    <img src="assets/covers/c28.jpg" style="--x:49%;--y:70%;--w:170px;--d:6.16s;--o:0.45" alt="">
+    <img src="assets/covers/c30.jpg" style="--x:57%;--y:70%;--w:155px;--d:6.44s;--o:0.41" alt="">
+    <img src="assets/covers/c31.jpg" style="--x:74%;--y:73%;--w:140px;--d:6.72s;--o:0.44" alt="">
+    <img src="assets/covers/c33.jpg" style="--x:83%;--y:80%;--w:162px;--d:7.0s;--o:0.38" alt="">
+    <img src="assets/covers/c35.jpg" style="--x:92%;--y:81%;--w:140px;--d:7.28s;--o:0.47" alt="">
+    <img src="assets/covers/c36.jpg" style="--x:1%;--y:83%;--w:170px;--d:7.56s;--o:0.36" alt="">
   </div>
   <div class="bg-dots" aria-hidden="true"></div>
   <nav class="topbar">

@@ -27,14 +27,14 @@
       <h1>预推免填表助手</h1>
       <p class="lead">辅助填写高校预推免、夏令营报名表。个人档案只保存在本机浏览器中，不自动提交，不处理验证码与登录密码。</p>
       <div class="actions">
-        <a class="btn primary" id="downloadButton" href="https://github.com/XIA-2005/tuimian-autofill/releases/latest/download/tuimian-autofill-v1.15.4.zip">⬇ 下载 v1.15.4 安装包</a>
+        <a class="btn primary" id="downloadButton" href="./tuimian-autofill-v2.0.0.zip" download>⬇ 下载 v2.0.0 安装包</a>
         <a class="btn secondary" href="https://github.com/XIA-2005/tuimian-autofill">查看 GitHub 源码</a>
       </div>
       <div class="stats">
-        <div class="stat"><div class="num" id="downloadCount">—</div><div class="label">GitHub Release 真实下载次数</div></div>
-        <div class="stat"><div class="num" id="releaseVersion">v1.15.4</div><div class="label">当前公开版本</div></div>
+        <div class="stat"><div class="num">本站直链</div><div class="label">无需跳转第三方下载</div></div>
+        <div class="stat"><div class="num" id="releaseVersion">v2.0.0</div><div class="label">当前公开版本</div></div>
       </div>
-      <p class="meta" id="statsStatus">下载次数来自 GitHub 官方接口，正在读取……</p>
+      <p class="meta">SHA-256：<code>EA520AE8B02EC0EC593A8F8D1D7ABF6C96215E24571C4943420AC8249746E8DD</code></p>
     </div>
   </header>
 
@@ -81,7 +81,7 @@
         <li>个人档案保存于浏览器本地 <code>chrome.storage.local</code>。</li>
         <li>不会读取或填写密码、验证码、短信验证字段。</li>
         <li>不会上传个人档案；网页也没有接入第三方访客跟踪代码。</li>
-        <li>下载次数是 GitHub Release 文件的公开累计下载次数，不等同于实际安装人数。</li>
+        <li>安装包由本站直接提供，可使用页首 SHA-256 校验文件完整性。</li>
       </ul>
       <p><a href="https://github.com/XIA-2005/tuimian-autofill/blob/main/PRIVACY.md">查看完整隐私说明</a></p>
     </section>
@@ -98,31 +98,5 @@
   </main>
 
   <footer class="footer"><div class="wrap">预推免填表助手 · 免费公开发布 · 请在提交前人工核对所有内容</div></footer>
-  <script>
-    /**
-     * 功能说明：读取 GitHub 最新 Release，并展示公开版本和安装包真实下载次数。
-     * 统计原理：download_count 由 GitHub 对 Release Asset 的下载请求累计生成。
-     */
-    async function loadReleaseStats() {
-      const statusNode = document.getElementById('statsStatus');
-      try {
-        const response = await fetch('https://api.github.com/repos/XIA-2005/tuimian-autofill/releases/latest', {
-          headers: { Accept: 'application/vnd.github+json' }
-        });
-        if (!response.ok) throw new Error('GitHub API ' + response.status);
-        const release = await response.json();
-        const asset = release.assets.find(function (item) { return item.name.toLowerCase().endsWith('.zip'); });
-        document.getElementById('releaseVersion').textContent = release.tag_name || 'v1.15.4';
-        if (asset) {
-          document.getElementById('downloadCount').textContent = new Intl.NumberFormat('zh-CN').format(asset.download_count || 0);
-          document.getElementById('downloadButton').href = asset.browser_download_url;
-        }
-        statusNode.textContent = '数据来自 GitHub 官方 Releases API。';
-      } catch (error) {
-        statusNode.textContent = '暂时无法读取下载次数，不影响下载安装包。';
-      }
-    }
-    loadReleaseStats();
-  </script>
 </body>
 </html>

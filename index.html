@@ -24,7 +24,6 @@
                 coverBob 5s ease-in-out calc(var(--d) + 1.2s) infinite alternate}
     @keyframes coverIn{to{opacity:var(--o);transform:translateY(0) scale(1)}}
     @keyframes coverBob{from{translate:0 0}to{translate:var(--bx,0px) var(--by,-70px)}}
-    @media(max-width:640px){.bg-float img{width:calc(var(--w) * .42)}}
     .bg-dots{position:fixed;inset:0;z-index:0;pointer-events:none;
       background-image:radial-gradient(circle,#00000010 1px,transparent 1.2px);background-size:14px 14px}
     a{color:#1d5a8f;font-weight:800}
@@ -121,6 +120,10 @@
     .footer b{color:#fff}
     @media(max-width:860px){
       .card{padding:22px}
+    }
+    @media(max-width:640px){
+      .bg-float img{width:calc(var(--w) * .7)}
+      .card{background:#fdfcfa8f;-webkit-backdrop-filter:blur(10px) saturate(1.25);backdrop-filter:blur(10px) saturate(1.25)}
     }
   </style>
 </head>

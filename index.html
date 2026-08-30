@@ -6,6 +6,7 @@
   <meta name="description" content="XIA的小站 — xiaaaaa.top。以《芦毛灰姑娘》小栗帽为主题的应援站：开源项目与嵌入式技术文章。">
   <title>XIA的小站 · xiaaaaa.top</title>
   <link rel="preload" as="image" href="assets/cg-blue.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/covers-sprite.webp">
   <style>
     :root{
       --navy:#0b1420;--navy2:#101c2e;--blue:#4a9ad4;--red:#c73a34;
@@ -14,15 +15,30 @@
     *{box-sizing:border-box}html{scroll-behavior:smooth}
     body{margin:0;background:var(--paper);color:var(--ink);position:relative;
       font:16px/1.85 "PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif}
-    /* 背景封面：图片解码完成后短暂淡入；保持静止，避免滚动时反复重绘和错位 */
+    /* 背景封面：38 张图片共用精灵图；所有动画变量均携带完整单位，保证 transform 在各浏览器中稳定生效 */
     .bg-float{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
     .bg-float::after{content:"";position:absolute;inset:0;
       background:linear-gradient(180deg,#f4f2ec1f,#f4f2ec59 55%,#f4f2ec26)}
-    .bg-float img{position:absolute;left:var(--x);top:var(--y);width:var(--w);height:auto;aspect-ratio:auto 7 / 10;display:block;
-      opacity:0;transform:rotate(var(--r,0deg));border:3px solid #000;box-shadow:6px 6px 0 #00000026;
-      contain:paint;transition:opacity .28s ease}
-    .bg-float img[hidden]{display:none}
-    body.covers-ready .bg-float img.is-loaded{opacity:var(--o)}
+    .cover{--move-x-0:-32px;--move-y-0:16px;--angle-0:-4deg;
+      --move-x-1:36px;--move-y-1:-24px;--angle-1:4deg;
+      --move-x-2:18px;--move-y-2:30px;--angle-2:2deg;
+      --move-x-3:-26px;--move-y-3:-18px;--angle-3:-3deg;
+      --dur:6.4s;--delay:0s;
+      position:absolute;left:var(--x);top:var(--y);width:var(--w);height:auto;aspect-ratio:168 / 240;
+      display:block;opacity:0;border:3px solid #000;box-shadow:6px 6px 0 #00000026;
+      background:url("assets/covers-sprite.webp") no-repeat;
+      background-size:800% 500%;background-position:var(--sprite-x,0%) var(--sprite-y,0%);
+      transform-origin:center center;will-change:transform;
+      transition:opacity .4s ease;
+      animation:coverSway var(--dur) ease-in-out var(--delay) infinite}
+    .cover[hidden]{display:none}
+    body.covers-ready .cover{opacity:var(--o)}
+    @keyframes coverSway{
+      0%,100%{transform:translate3d(var(--move-x-0),var(--move-y-0),0) rotate(var(--angle-0))}
+      27%{transform:translate3d(var(--move-x-1),var(--move-y-1),0) rotate(var(--angle-1))}
+      58%{transform:translate3d(var(--move-x-2),var(--move-y-2),0) rotate(var(--angle-2))}
+      82%{transform:translate3d(var(--move-x-3),var(--move-y-3),0) rotate(var(--angle-3))}
+    }
     .bg-dots{position:fixed;inset:0;z-index:0;pointer-events:none;
       background-image:radial-gradient(circle,#00000010 1px,transparent 1.2px);background-size:14px 14px}
     a{color:#1d5a8f;font-weight:800}
@@ -143,55 +159,53 @@
       .card{padding:22px}
     }
     @media(max-width:640px){
-      .bg-float img{width:calc(var(--w) * .7)}
       .card{background:#fdfcfaf5}
     }
     @media(prefers-reduced-motion:reduce){
       html{scroll-behavior:auto}
-      .bg-float img{transition:none}
     }
   </style>
 </head>
 <body>
 <div class="bg-float" aria-hidden="true">
-    <img data-src="assets/covers/c01.webp" style="--x:4.5%;--y:1.5%;--w:130px;--r:-2.1deg;--o:0.42" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c02.webp" style="--x:24.7%;--y:2.4%;--w:148px;--r:-3.5deg;--o:0.48" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c03.webp" style="--x:50.0%;--y:3.0%;--w:130px;--r:-1.2deg;--o:0.45" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c04.webp" style="--x:72.0%;--y:1.1%;--w:124px;--r:2.4deg;--o:0.49" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c05.webp" style="--x:94.9%;--y:3.0%;--w:130px;--r:1.7deg;--o:0.39" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c06.webp" style="--x:5.1%;--y:16.0%;--w:124px;--r:-1.6deg;--o:0.49" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c07.webp" style="--x:24.3%;--y:16.2%;--w:142px;--r:1.8deg;--o:0.44" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c08.webp" style="--x:49.5%;--y:14.1%;--w:142px;--r:-3.4deg;--o:0.39" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c09.webp" style="--x:72.8%;--y:16.6%;--w:124px;--r:-1.7deg;--o:0.45" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c10.webp" style="--x:96.9%;--y:15.7%;--w:124px;--r:-2.5deg;--o:0.38" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c11.webp" style="--x:5.1%;--y:29.0%;--w:148px;--r:-3.5deg;--o:0.4" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c12.webp" style="--x:25.2%;--y:28.8%;--w:142px;--r:-2.7deg;--o:0.44" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c13.webp" style="--x:48.5%;--y:29.3%;--w:130px;--r:-2.4deg;--o:0.49" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c14.webp" style="--x:74.8%;--y:29.7%;--w:148px;--r:1.5deg;--o:0.44" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c15.webp" style="--x:96.9%;--y:28.0%;--w:148px;--r:-1.6deg;--o:0.4" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c16.webp" style="--x:0.7%;--y:42.1%;--w:124px;--r:-2.9deg;--o:0.44" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c17.webp" style="--x:24.8%;--y:42.8%;--w:142px;--r:-1.5deg;--o:0.44" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c18.webp" style="--x:49.6%;--y:40.7%;--w:124px;--r:2.5deg;--o:0.49" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c19.webp" style="--x:76.0%;--y:41.4%;--w:148px;--r:-0.7deg;--o:0.5" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c20.webp" style="--x:98.9%;--y:42.5%;--w:136px;--r:3.0deg;--o:0.39" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c21.webp" style="--x:0.7%;--y:55.8%;--w:148px;--r:0.9deg;--o:0.45" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c22.webp" style="--x:28.8%;--y:53.4%;--w:130px;--r:-1.6deg;--o:0.5" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c23.webp" style="--x:51.2%;--y:54.8%;--w:142px;--r:-2.9deg;--o:0.39" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c24.webp" style="--x:74.7%;--y:53.1%;--w:142px;--r:1.7deg;--o:0.43" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c25.webp" style="--x:96.6%;--y:53.4%;--w:142px;--r:2.0deg;--o:0.47" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c26.webp" style="--x:5.2%;--y:68.1%;--w:130px;--r:0.3deg;--o:0.39" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c27.webp" style="--x:26.6%;--y:66.4%;--w:142px;--r:-2.1deg;--o:0.47" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c28.webp" style="--x:48.4%;--y:67.9%;--w:148px;--r:-0.8deg;--o:0.45" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c29.webp" style="--x:71.5%;--y:68.6%;--w:136px;--r:1.0deg;--o:0.5" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c30.webp" style="--x:97.0%;--y:68.6%;--w:130px;--r:-1.7deg;--o:0.49" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c31.webp" style="--x:4.7%;--y:80.9%;--w:142px;--r:-1.5deg;--o:0.46" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c32.webp" style="--x:27.4%;--y:80.2%;--w:130px;--r:3.3deg;--o:0.45" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c33.webp" style="--x:50.6%;--y:81.4%;--w:124px;--r:1.3deg;--o:0.45" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c34.webp" style="--x:75.5%;--y:80.5%;--w:148px;--r:-0.5deg;--o:0.38" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c35.webp" style="--x:96.7%;--y:82.0%;--w:148px;--r:-3.4deg;--o:0.42" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c36.webp" style="--x:3.5%;--y:95.0%;--w:136px;--r:-1.0deg;--o:0.46" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c37.webp" style="--x:26.5%;--y:93.4%;--w:136px;--r:3.1deg;--o:0.46" alt="" loading="lazy" decoding="async" fetchpriority="low">
-    <img data-src="assets/covers/c38.webp" style="--x:49.6%;--y:92.6%;--w:148px;--r:-2.8deg;--o:0.41" alt="" loading="lazy" decoding="async" fetchpriority="low">
+    <span class="cover" style="--sx:0;--sy:0;--x:4.5%;--y:1.5%;--w:130px;--r:-2.1deg;--o:0.42"></span>
+    <span class="cover" style="--sx:1;--sy:0;--x:24.7%;--y:2.4%;--w:148px;--r:-3.5deg;--o:0.48"></span>
+    <span class="cover" style="--sx:2;--sy:0;--x:50.0%;--y:3.0%;--w:130px;--r:-1.2deg;--o:0.45"></span>
+    <span class="cover" style="--sx:3;--sy:0;--x:72.0%;--y:1.1%;--w:124px;--r:2.4deg;--o:0.49"></span>
+    <span class="cover" style="--sx:4;--sy:0;--x:94.9%;--y:3.0%;--w:130px;--r:1.7deg;--o:0.39"></span>
+    <span class="cover" style="--sx:5;--sy:0;--x:5.1%;--y:16.0%;--w:124px;--r:-1.6deg;--o:0.49"></span>
+    <span class="cover" style="--sx:6;--sy:0;--x:24.3%;--y:16.2%;--w:142px;--r:1.8deg;--o:0.44"></span>
+    <span class="cover" style="--sx:7;--sy:0;--x:49.5%;--y:14.1%;--w:142px;--r:-3.4deg;--o:0.39"></span>
+    <span class="cover" style="--sx:0;--sy:1;--x:72.8%;--y:16.6%;--w:124px;--r:-1.7deg;--o:0.45"></span>
+    <span class="cover" style="--sx:1;--sy:1;--x:96.9%;--y:15.7%;--w:124px;--r:-2.5deg;--o:0.38"></span>
+    <span class="cover" style="--sx:2;--sy:1;--x:5.1%;--y:29.0%;--w:148px;--r:-3.5deg;--o:0.4"></span>
+    <span class="cover" style="--sx:3;--sy:1;--x:25.2%;--y:28.8%;--w:142px;--r:-2.7deg;--o:0.44"></span>
+    <span class="cover" style="--sx:4;--sy:1;--x:48.5%;--y:29.3%;--w:130px;--r:-2.4deg;--o:0.49"></span>
+    <span class="cover" style="--sx:5;--sy:1;--x:74.8%;--y:29.7%;--w:148px;--r:1.5deg;--o:0.44"></span>
+    <span class="cover" style="--sx:6;--sy:1;--x:96.9%;--y:28.0%;--w:148px;--r:-1.6deg;--o:0.4"></span>
+    <span class="cover" style="--sx:7;--sy:1;--x:0.7%;--y:42.1%;--w:124px;--r:-2.9deg;--o:0.44"></span>
+    <span class="cover" style="--sx:0;--sy:2;--x:24.8%;--y:42.8%;--w:142px;--r:-1.5deg;--o:0.44"></span>
+    <span class="cover" style="--sx:1;--sy:2;--x:49.6%;--y:40.7%;--w:124px;--r:2.5deg;--o:0.49"></span>
+    <span class="cover" style="--sx:2;--sy:2;--x:76.0%;--y:41.4%;--w:148px;--r:-0.7deg;--o:0.5"></span>
+    <span class="cover" style="--sx:3;--sy:2;--x:98.9%;--y:42.5%;--w:136px;--r:3.0deg;--o:0.39"></span>
+    <span class="cover" style="--sx:4;--sy:2;--x:0.7%;--y:55.8%;--w:148px;--r:0.9deg;--o:0.45"></span>
+    <span class="cover" style="--sx:5;--sy:2;--x:28.8%;--y:53.4%;--w:130px;--r:-1.6deg;--o:0.5"></span>
+    <span class="cover" style="--sx:6;--sy:2;--x:51.2%;--y:54.8%;--w:142px;--r:-2.9deg;--o:0.39"></span>
+    <span class="cover" style="--sx:7;--sy:2;--x:74.7%;--y:53.1%;--w:142px;--r:1.7deg;--o:0.43"></span>
+    <span class="cover" style="--sx:0;--sy:3;--x:96.6%;--y:53.4%;--w:142px;--r:2.0deg;--o:0.47"></span>
+    <span class="cover" style="--sx:1;--sy:3;--x:5.2%;--y:68.1%;--w:130px;--r:0.3deg;--o:0.39"></span>
+    <span class="cover" style="--sx:2;--sy:3;--x:26.6%;--y:66.4%;--w:142px;--r:-2.1deg;--o:0.47"></span>
+    <span class="cover" style="--sx:3;--sy:3;--x:48.4%;--y:67.9%;--w:148px;--r:-0.8deg;--o:0.45"></span>
+    <span class="cover" style="--sx:4;--sy:3;--x:71.5%;--y:68.6%;--w:136px;--r:1.0deg;--o:0.5"></span>
+    <span class="cover" style="--sx:5;--sy:3;--x:97.0%;--y:68.6%;--w:130px;--r:-1.7deg;--o:0.49"></span>
+    <span class="cover" style="--sx:6;--sy:3;--x:4.7%;--y:80.9%;--w:142px;--r:-1.5deg;--o:0.46"></span>
+    <span class="cover" style="--sx:7;--sy:3;--x:27.4%;--y:80.2%;--w:130px;--r:3.3deg;--o:0.45"></span>
+    <span class="cover" style="--sx:0;--sy:4;--x:50.6%;--y:81.4%;--w:124px;--r:1.3deg;--o:0.45"></span>
+    <span class="cover" style="--sx:1;--sy:4;--x:75.5%;--y:80.5%;--w:148px;--r:-0.5deg;--o:0.38"></span>
+    <span class="cover" style="--sx:2;--sy:4;--x:96.7%;--y:82.0%;--w:148px;--r:-3.4deg;--o:0.42"></span>
+    <span class="cover" style="--sx:3;--sy:4;--x:3.5%;--y:95.0%;--w:136px;--r:-1.0deg;--o:0.46"></span>
+    <span class="cover" style="--sx:4;--sy:4;--x:26.5%;--y:93.4%;--w:136px;--r:3.1deg;--o:0.46"></span>
+    <span class="cover" style="--sx:5;--sy:4;--x:49.6%;--y:92.6%;--w:148px;--r:-2.8deg;--o:0.41"></span>
   </div>
   <div class="bg-dots" aria-hidden="true"></div>
   <nav class="topbar">
@@ -372,56 +386,49 @@
     });
     /**
      * 功能：初始化稳定的背景封面层。
-     * 原理：页面内容首次渲染完成后，将百分比坐标一次性换算为像素坐标；后续内容增高时
-     * 不再重新计算位置，因此封面不会随着页面高度变化而跳动。移动端使用固定网格，
-     * 仅在视口宽度真实变化或跨越断点时重排，忽略浏览器地址栏收起引发的高度 resize。
+     * 原理：38 张封面共用一张精灵图，一次请求即可显示。坐标先换成像素再做互斥推开，
+     * 晃动幅度不超过剩余间隙，因此不会重叠。投喂列表增高时不再重排，封面位置保持稳定。
      */
     (function initCoverLayer() {
       var layer = document.querySelector('.bg-float');
       if (!layer) return;
 
-      var coverImages = Array.prototype.slice.call(layer.querySelectorAll('img'));
-      var originalLayout = coverImages.map(function (image) {
+      var covers = Array.prototype.slice.call(layer.querySelectorAll('.cover'));
+      var originalLayout = covers.map(function (cover) {
         return {
-          x: parseFloat(image.style.getPropertyValue('--x')) || 0,
-          y: parseFloat(image.style.getPropertyValue('--y')) || 0
+          x: parseFloat(cover.style.getPropertyValue('--x')) || 0,
+          y: parseFloat(cover.style.getPropertyValue('--y')) || 0,
+          w: parseFloat(cover.style.getPropertyValue('--w')) || 130
         };
       });
       var lastViewportWidth = 0;
       var lastWasMobile = false;
       var resizeTimer = 0;
+      var coverRatio = 240 / 168;
 
       /**
-       * 功能：等待图片完成解码后再显示，避免尚未解码的图片在滚动中突然闪现。
-       * @param {HTMLImageElement} image 背景封面图片元素。
+       * 功能：精灵图解码完成后再淡入，避免未就绪时闪空框。
        */
-      function revealAfterDecode(image) {
-        function reveal() {
+      function revealWhenSpriteReady() {
+        var sprite = new Image();
+        function show() {
           window.requestAnimationFrame(function () {
-            image.classList.add('is-loaded');
+            document.body.classList.add('covers-ready');
           });
         }
-
-        function decodeAndReveal() {
-          if (typeof image.decode === 'function') {
-            image.decode().catch(function () {}).then(reveal);
-          } else {
-            reveal();
-          }
-        }
-
-        if (image.complete && image.naturalWidth > 0) {
-          decodeAndReveal();
+        sprite.src = 'assets/covers-sprite.webp';
+        if (typeof sprite.decode === 'function') {
+          sprite.decode().then(show).catch(show);
+        } else if (sprite.complete) {
+          show();
         } else {
-          image.addEventListener('load', decodeAndReveal, { once: true });
+          sprite.addEventListener('load', show, { once: true });
+          sprite.addEventListener('error', show, { once: true });
         }
       }
 
       /**
        * 功能：计算不受“投喂解锁”动态列表影响的稳定页面高度。
-       * 原理：稳定高度 = 当前页面总高度 - 动态列表令 feed-grid 增加的高度。
-       * 这样无论用户打开页面时已解锁多少项目，背景封面都使用同一套纵向基准；
-       * 随后新增或重置项目只改变正文高度，不会把封面推走或裁掉。
        * @returns {number} 背景封面布局使用的稳定像素高度。
        */
       function getStableLayerHeight() {
@@ -447,7 +454,103 @@
       }
 
       /**
-       * 功能：根据当前页面宽度生成确定性的封面坐标，并立即固定为像素值。
+       * 功能：把互相侵入最小间距的封面沿较短重叠轴推开，并限制在图层范围内。
+       * @param {Array<{x:number,y:number,w:number,h:number}>} boxes 封面矩形。
+       * @param {number} gap 矩形之间需保留的像素间距（已计入晃动幅度）。
+       * @param {number} layerWidth 图层宽度。
+       * @param {number} layerHeight 图层高度。
+       */
+      function separateBoxes(boxes, gap, layerWidth, layerHeight) {
+        var i, j, iter, moved;
+        for (iter = 0; iter < 18; iter += 1) {
+          moved = false;
+          for (i = 0; i < boxes.length; i += 1) {
+            for (j = i + 1; j < boxes.length; j += 1) {
+              var a = boxes[i];
+              var b = boxes[j];
+              var overlapX = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+              var overlapY = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+              if (overlapX <= -gap || overlapY <= -gap) continue;
+
+              var push = (Math.min(overlapX, overlapY) + gap) * 0.5;
+              if (overlapX < overlapY) {
+                var dirX = (a.x + a.w * 0.5) <= (b.x + b.w * 0.5) ? -1 : 1;
+                a.x += dirX * push;
+                b.x -= dirX * push;
+              } else {
+                var dirY = (a.y + a.h * 0.5) <= (b.y + b.h * 0.5) ? -1 : 1;
+                a.y += dirY * push;
+                b.y -= dirY * push;
+              }
+              moved = true;
+            }
+          }
+          if (!moved) break;
+        }
+
+        boxes.forEach(function (box) {
+          box.x = Math.min(Math.max(box.x, -box.w * 0.18), layerWidth - box.w * 0.82);
+          box.y = Math.min(Math.max(box.y, 4), layerHeight - box.h * 0.55);
+        });
+      }
+
+      /**
+       * 功能：生成指定闭区间内的随机数。
+       * 原理：Math.random() 产生 [0,1) 的均匀随机数，经区间长度缩放并叠加下限得到目标值：
+       *       随机值 = 最小值 + Math.random() × (最大值 - 最小值)。
+       * @param {number} minValue 随机区间下限。
+       * @param {number} maxValue 随机区间上限。
+       * @returns {number} 区间内的随机数。
+       */
+      function randomBetween(minValue, maxValue) {
+        return minValue + Math.random() * (maxValue - minValue);
+      }
+
+      /**
+       * 功能：为每张封面生成独立、明显且不同步的随机晃动轨迹。
+       * 原理：四个轨迹点在水平轴上交替分布于两侧，并随机改变纵向位移与旋转角；
+       *       每张封面再使用随机周期和负延迟，从而避免 38 张图片同方向、同节奏摆动。
+       * @param {HTMLElement} cover 封面元素。
+       * @param {number} maxShift 单方向允许的最大平移像素。
+       */
+      function assignRandomSway(cover, maxShift) {
+        var baseRotation = parseFloat(cover.style.getPropertyValue('--r')) || 0;
+        var direction = Math.random() < 0.5 ? -1 : 1;
+        var rotateRange = randomBetween(4.8, 8.2);
+        var waypoints = [
+          {
+            x: direction * randomBetween(maxShift * 0.42, maxShift * 0.72),
+            y: randomBetween(-maxShift * 0.68, maxShift * 0.68),
+            angle: baseRotation + direction * rotateRange
+          },
+          {
+            x: -direction * randomBetween(maxShift * 0.78, maxShift),
+            y: randomBetween(-maxShift, -maxShift * 0.42),
+            angle: baseRotation - direction * randomBetween(rotateRange * 0.72, rotateRange)
+          },
+          {
+            x: direction * randomBetween(maxShift * 0.58, maxShift * 0.92),
+            y: randomBetween(maxShift * 0.5, maxShift),
+            angle: baseRotation + direction * randomBetween(rotateRange * 0.35, rotateRange * 0.78)
+          },
+          {
+            x: -direction * randomBetween(maxShift * 0.45, maxShift * 0.82),
+            y: randomBetween(-maxShift * 0.75, maxShift * 0.75),
+            angle: baseRotation - direction * randomBetween(rotateRange * 0.38, rotateRange * 0.84)
+          }
+        ];
+
+        cover.style.setProperty('--dur', randomBetween(5.2, 8.8).toFixed(2) + 's');
+        cover.style.setProperty('--delay', (-randomBetween(0, 8.8)).toFixed(2) + 's');
+        waypoints.forEach(function (point, pointIndex) {
+          cover.style.setProperty('--move-x-' + pointIndex, point.x.toFixed(1) + 'px');
+          cover.style.setProperty('--move-y-' + pointIndex, point.y.toFixed(1) + 'px');
+          cover.style.setProperty('--angle-' + pointIndex, point.angle.toFixed(2) + 'deg');
+        });
+      }
+
+      /**
+       * 功能：根据当前页面宽度生成确定性的封面坐标，推开重叠后固定为像素值。
        */
       function applyCoverLayout() {
         var viewportWidth = document.documentElement.clientWidth || window.innerWidth;
@@ -457,14 +560,22 @@
         var mobileColumns = 3;
         var mobileCount = 21;
         var mobileRows = Math.ceil(mobileCount / mobileColumns);
+        var boxes = [];
+        /* 桌面端相较旧版约放大 60%，同时保留平板与手机上的可读间距。 */
+        var scale = isMobile ? 0.86 : (viewportWidth < 900 ? 1.05 : (viewportWidth < 1280 ? 1.22 : 1.45));
+        var swayBudget = isMobile ? 18 : (viewportWidth < 900 ? 28 : (viewportWidth < 1280 ? 36 : 46));
 
-        coverImages.forEach(function (image, index) {
+        covers.forEach(function (cover, index) {
           if (isMobile && index >= mobileCount) {
-            image.hidden = true;
+            cover.hidden = true;
             return;
           }
 
-          image.hidden = false;
+          cover.hidden = false;
+          var displayW = originalLayout[index].w * scale;
+          var displayH = displayW * coverRatio;
+          var spriteColumn = parseInt(cover.style.getPropertyValue('--sx'), 10) || 0;
+          var spriteRow = parseInt(cover.style.getPropertyValue('--sy'), 10) || 0;
           var xPercent = isMobile
             ? 4 + (index % mobileColumns) * 42
             : originalLayout[index].x;
@@ -472,90 +583,43 @@
             ? 2 + Math.floor(index / mobileColumns) * (91 / (mobileRows - 1))
             : originalLayout[index].y;
 
-          image.style.setProperty('--x', (xPercent / 100 * layerWidth).toFixed(1) + 'px');
-          image.style.setProperty('--y', (yPercent / 100 * layerHeight).toFixed(1) + 'px');
+          cover.style.setProperty('--w', displayW.toFixed(1) + 'px');
+          cover.style.setProperty('--sprite-x', (spriteColumn / 7 * 100).toFixed(4) + '%');
+          cover.style.setProperty('--sprite-y', (spriteRow / 4 * 100).toFixed(4) + '%');
+          boxes.push({
+            el: cover,
+            index: index,
+            x: xPercent / 100 * layerWidth,
+            y: yPercent / 100 * layerHeight,
+            w: displayW,
+            h: displayH
+          });
+        });
+
+        separateBoxes(boxes, 10 + swayBudget * 2, layerWidth, layerHeight);
+
+        boxes.forEach(function (box) {
+          box.el.style.setProperty('--x', box.x.toFixed(1) + 'px');
+          box.el.style.setProperty('--y', box.y.toFixed(1) + 'px');
+          assignRandomSway(box.el, swayBudget);
         });
 
         lastViewportWidth = viewportWidth;
         lastWasMobile = isMobile;
-        document.body.classList.add('covers-ready');
       }
 
-      coverImages.forEach(revealAfterDecode);
       applyCoverLayout();
-
-      /**
-       * 功能：只为即将进入视口的封面设置真实地址，避免 38 张图片在打开页面时同时抢占带宽。
-       * @param {HTMLImageElement} image 即将加载的背景封面。
-       */
-      function requestCoverImage(image) {
-        var source = image.getAttribute('data-src');
-        if (!source || image.getAttribute('src')) return;
-        image.setAttribute('src', source);
-        image.removeAttribute('data-src');
-      }
-
-      if ('IntersectionObserver' in window) {
-        var coverObserver = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            if (!entry.isIntersecting) return;
-            requestCoverImage(entry.target);
-            coverObserver.unobserve(entry.target);
-          });
-        }, { rootMargin: '400px 0px', threshold: 0.01 });
-
-        coverImages.forEach(function (image) {
-          coverObserver.observe(image);
-        });
-      } else {
-        coverImages.forEach(requestCoverImage);
-      }
-
-      var preheatTimer = 0;
-
-      /**
-       * 功能：首屏完成后分批预热仍未请求的可见封面。
-       * 每次只启动一个低优先级请求，避免网络队列拥塞；已经进入观察区的图片会自动跳过。
-       * @param {number} delay 下一张封面开始预热前的间隔（毫秒）。
-       */
-      function scheduleCoverPreheat(delay) {
-        if (preheatTimer) return;
-        if (navigator.connection && navigator.connection.saveData) return;
-
-        preheatTimer = window.setTimeout(function () {
-          preheatTimer = 0;
-          var nextImage = coverImages.find(function (image) {
-            return !image.hidden && image.hasAttribute('data-src');
-          });
-          if (!nextImage) return;
-
-          nextImage.loading = 'eager';
-          requestCoverImage(nextImage);
-          scheduleCoverPreheat(180);
-        }, delay);
-      }
-
-      if (document.readyState === 'complete') {
-        scheduleCoverPreheat(1000);
-      } else {
-        window.addEventListener('load', function () {
-          scheduleCoverPreheat(1000);
-        }, { once: true });
-      }
+      revealWhenSpriteReady();
 
       window.addEventListener('resize', function () {
         var viewportWidth = document.documentElement.clientWidth || window.innerWidth;
         var isMobile = viewportWidth <= 640;
         var crossedBreakpoint = isMobile !== lastWasMobile;
 
-        // 移动端地址栏收起通常只改变高度；小幅宽度抖动也无需让整层封面重新定位。
         if (!crossedBreakpoint && Math.abs(viewportWidth - lastViewportWidth) < 48) return;
 
         window.clearTimeout(resizeTimer);
-        resizeTimer = window.setTimeout(function () {
-          applyCoverLayout();
-          scheduleCoverPreheat(600);
-        }, 120);
+        resizeTimer = window.setTimeout(applyCoverLayout, 120);
       }, { passive: true });
     })();
   </script>

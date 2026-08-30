@@ -98,21 +98,36 @@
     .articles a:hover{text-decoration:underline;text-decoration-color:var(--red)}
     .more{margin-top:14px;text-align:right}
 
-    /* 战绩 · 重赏列表 */
-    .wins-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:22px;align-items:start;margin-top:14px}
-    .wins{list-style:none;padding:0;margin:0}
-    .wins li{display:flex;align-items:center;gap:12px;padding:8px 4px;border-bottom:2px dashed var(--line)}
-    .wins li:last-child{border-bottom:none}
+    /* 食堂 · 投喂解锁 */
+    .feed-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:22px;align-items:start;margin-top:14px}
+    .feed-zone{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+    .feed-btn{font-size:16px;padding:13px 26px;background:var(--red);color:#fff;border:3px solid #000;
+      font-weight:900;cursor:pointer;box-shadow:6px 6px 0 #00000055;transition:transform .1s}
+    .feed-btn:active{transform:translate(4px,4px);box-shadow:2px 2px 0 #00000055}
+    .feed-btn:disabled{background:#70747e;cursor:default;transform:none}
+    .feed-count{font-size:30px;font-weight:900;font-family:Consolas,monospace;color:var(--red)}
+    .feed-msg{color:#77756d;font-weight:700}
+    .reset-btn{background:#fff;color:#56544e;border:2px solid #000;font-weight:700;font-size:12px;
+      padding:6px 12px;cursor:pointer;box-shadow:3px 3px 0 #00000033}
+    .reset-btn:active{transform:translate(2px,2px);box-shadow:none}
+    .feed-stack{margin-top:16px;display:flex;flex-direction:column;gap:10px}
     .grade{flex:none;font-weight:900;font-size:12px;letter-spacing:1px;padding:1px 10px;border:2px solid #000;color:#fff;min-width:40px;text-align:center}
     .grade.gi{background:var(--red)}
     .grade.gii{background:var(--navy)}
     .grade.giii{background:#70747e}
+    .race-row{display:flex;align-items:center;gap:12px;padding:8px 12px;border:2px solid #000;background:#fff;box-shadow:4px 4px 0 #00000026}
     .wname{font-weight:800;flex:1}
     .wyears{font-family:Consolas,monospace;font-weight:900;color:#56544e}
+    .honor-banner{display:block;width:100%;padding:9px 14px;text-align:center;font-weight:900;color:#fff;
+      letter-spacing:2px;font-size:16px;border-top:3px solid #b9b6ae;border-bottom:3px solid #b9b6ae;
+      text-shadow:0 1px 3px #00000059;box-shadow:4px 4px 0 #00000026}
+    .honor-banner .hy{display:block;font-size:12px;letter-spacing:1px;opacity:.95;font-family:Consolas,monospace}
+    .pop{animation:popIn .55s cubic-bezier(.2,.75,.25,1)}
+    @keyframes popIn{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
     .wins-img{margin:0;border:3px solid #000;box-shadow:8px 8px 0 #00000055;overflow:hidden;transform:rotate(1.5deg)}
     .wins-img img{display:block;width:100%;height:auto}
     .wins-note{color:#77756d;font-size:13px;margin:14px 0 0}
-    @media(max-width:860px){.wins-grid{grid-template-columns:1fr}}
+    @media(max-width:860px){.feed-grid{grid-template-columns:1fr}}
 
     /* 链接 */
     .links{list-style:none;padding:0;margin:0}
@@ -177,7 +192,7 @@
     <div class="wrap">
       <a class="logo" href="#">XIA<b>的小站</b></a>
       <div class="topnav">
-        <a href="#projects">项目</a><a href="#articles">文章</a><a href="#wins">战绩</a><a href="#links">链接</a>
+        <a href="#projects">项目</a><a href="#articles">文章</a><a href="#feed">食堂</a><a href="#links">链接</a>
       </div>
     </div>
   </nav>
@@ -221,25 +236,23 @@
       <div class="more"><a class="mini-btn plain" href="https://blog.csdn.net/Xjb200512?type=blog" target="_blank">更多文章 →</a></div>
     </section>
 
-    <section class="card" id="wins">
-      <span class="tab">战绩 · 重赏制霸</span>
-      <p style="margin:6px 0 0;color:#56544e">现实中怪马小栗帽的重赏获胜记录——每一场都是从漫画里跑出来的传说。</p>
-      <div class="wins-grid">
-        <ul class="wins">
-          <li><span class="grade gi">GI</span><span class="wname">有马纪念</span><span class="wyears">1988 · 1990</span></li>
-          <li><span class="grade gi">GI</span><span class="wname">一哩冠军赛</span><span class="wyears">1989</span></li>
-          <li><span class="grade gi">GI</span><span class="wname">安田纪念</span><span class="wyears">1990</span></li>
-          <li><span class="grade gii">GII</span><span class="wname">新西兰杯四岁锦标</span><span class="wyears">1988</span></li>
-          <li><span class="grade gii">GII</span><span class="wname">高松宫杯</span><span class="wyears">1988</span></li>
-          <li><span class="grade gii">GII</span><span class="wname">每日王冠</span><span class="wyears">1988 · 1989</span></li>
-          <li><span class="grade giii">GIII</span><span class="wname">飞马锦标</span><span class="wyears">1988</span></li>
-          <li><span class="grade giii">GIII</span><span class="wname">每日杯</span><span class="wyears">1988</span></li>
-          <li><span class="grade giii">GIII</span><span class="wname">京都四岁特别</span><span class="wyears">1988</span></li>
-          <li><span class="grade giii">GIII</span><span class="wname">产经赏</span><span class="wyears">1989</span></li>
-        </ul>
+    <section class="card" id="feed">
+      <span class="tab">食堂 · 投喂</span>
+      <div class="feed-grid">
+        <div>
+          <div class="feed-zone">
+            <button class="feed-btn" id="feedBtn">🍚 投喂一次</button>
+            <div>
+              <div>已解锁 <span class="feed-count" id="feedCount">0</span> / <span id="feedTotal">16</span> 项战绩·成就</div>
+              <div class="feed-msg" id="feedMsg">每投喂一次，就揭晓一项怪马的胜利或荣誉。</div>
+            </div>
+            <button class="reset-btn" id="resetBtn">↺ 重新解锁</button>
+          </div>
+          <div class="feed-stack" id="feedStack"></div>
+          <p class="wins-note">※ 战绩与成就严格依据现实中赛马小栗帽（オグリキャップ）的历史记录整理。</p>
+        </div>
         <figure class="wins-img"><img src="assets/cg-thanks.webp" alt="800万部感謝 · 小栗帽" loading="lazy"></figure>
       </div>
-      <p class="wins-note">※ 严格依据现实中的赛马「小栗帽」（オグリキャップ）重赏获胜记录整理。</p>
     </section>
 
     <section class="card" id="links">
@@ -306,6 +319,71 @@
     }
     mobileCoverLayout();
     window.addEventListener('resize', mobileCoverLayout);
+    // 投喂解锁：每投喂一次揭晓一项战绩/成就（顺序严格按历史时间线，只存本机）
+    var feedPool = [
+      {t:'race', g:'GIII', name:'飞马锦标 优胜', y:'1988'},
+      {t:'race', g:'GIII', name:'每日杯 优胜', y:'1988'},
+      {t:'race', g:'GIII', name:'京都四岁特别 优胜', y:'1988'},
+      {t:'race', g:'GII', name:'新西兰杯四岁锦标 优胜', y:'1988'},
+      {t:'honor', name:'历届高松宫纪念冠军', y:'1988', c:'#a5a037'},
+      {t:'race', g:'GII', name:'每日王冠 优胜', y:'1988'},
+      {t:'honor', name:'历届日本最佳3岁雄马', c:'#cfc8ef'},
+      {t:'honor', name:'历届有马纪念冠军', y:'1988 · 1990', c:'#e8551c'},
+      {t:'race', g:'GII', name:'每日王冠 优胜（连霸达成）', y:'1989'},
+      {t:'race', g:'GIII', name:'产经赏 优胜', y:'1989'},
+      {t:'honor', name:'历届一哩冠军赛冠军', y:'1989', c:'#2f7f8c'},
+      {t:'honor', name:'历届安田纪念冠军', y:'1990', c:'#3c7d8a'},
+      {t:'race', g:'GI', name:'有马纪念 二度制霸', y:'1990'},
+      {t:'honor', name:'历届日本最佳4岁及以上雄马', c:'#d6cff2'},
+      {t:'honor', name:'历届日本马王', c:'#c3baea'},
+      {t:'honor', name:'日本殿堂马', c:'#f5d800'}
+    ];
+    var feedStack = document.getElementById('feedStack');
+    var feedCount = document.getElementById('feedCount');
+    var feedMsg = document.getElementById('feedMsg');
+    var feedBtn = document.getElementById('feedBtn');
+    document.getElementById('feedTotal').textContent = feedPool.length;
+    var WKEY = 'xiaaaaa_wins_unlocked';
+    var unlocked = Math.min(parseInt(localStorage.getItem(WKEY) || '0', 10) || 0, feedPool.length);
+    function makeItem(item) {
+      var el = document.createElement('div');
+      if (item.t === 'honor') {
+        el.className = 'honor-banner pop';
+        el.style.background = item.c;
+        el.innerHTML = item.name + (item.y ? '<span class="hy">' + item.y + '</span>' : '');
+      } else {
+        el.className = 'race-row pop';
+        el.innerHTML = '<span class="grade ' + item.g.toLowerCase() + '">' + item.g + '</span>' +
+          '<span class="wname">' + item.name + '</span><span class="wyears">' + item.y + '</span>';
+      }
+      return el;
+    }
+    function renderFeed() {
+      feedStack.innerHTML = '';
+      for (var i = 0; i < unlocked; i++) feedStack.appendChild(makeItem(feedPool[i]));
+      feedCount.textContent = unlocked;
+      if (unlocked >= feedPool.length) {
+        feedMsg.textContent = '全部荣誉解锁！这就是怪马——小栗帽。';
+        feedBtn.disabled = true;
+      } else {
+        feedMsg.textContent = '每投喂一次，就揭晓一项怪马的胜利或荣誉。';
+        feedBtn.disabled = false;
+      }
+    }
+    feedBtn.addEventListener('click', function () {
+      if (unlocked >= feedPool.length) return;
+      unlocked++;
+      localStorage.setItem(WKEY, unlocked);
+      renderFeed();
+      var last = feedStack.lastElementChild;
+      if (last) last.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+    document.getElementById('resetBtn').addEventListener('click', function () {
+      unlocked = 0;
+      localStorage.setItem(WKEY, 0);
+      renderFeed();
+    });
+    renderFeed();
   </script>
 </body>
 </html>

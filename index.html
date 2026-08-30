@@ -44,6 +44,24 @@
       50%{transform:translate3d(var(--move-x-2),var(--move-y-2),0) rotate(var(--angle-2))}
       75%{transform:translate3d(var(--move-x-3),var(--move-y-3),0) rotate(var(--angle-3))}
     }
+    /* 背景封面完整预览：固定在最高层，按 168:240 原比例显示单张精灵图区域。 */
+    .cover-preview{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;
+      padding:24px;background:#05070ad9;-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
+      opacity:0;visibility:hidden;pointer-events:none;
+      transition:opacity .22s ease,visibility 0s linear .22s}
+    .cover-preview.is-visible{opacity:1;visibility:visible;pointer-events:auto;transition-delay:0s}
+    .cover-preview__panel{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;
+      transform:translateY(18px) scale(.94);transition:transform .26s cubic-bezier(.2,.8,.2,1)}
+    .cover-preview.is-visible .cover-preview__panel{transform:none}
+    .cover-preview__photo{width:min(82vw,53.2vh,420px);aspect-ratio:168 / 240;border:4px solid #fff;
+      background:#fff url("assets/covers-sprite.webp") no-repeat;
+      background-size:800% 500%;background-position:var(--preview-sprite-x,0%) var(--preview-sprite-y,0%);
+      box-shadow:0 18px 60px #000000b8,10px 10px 0 #4a9ad4}
+    .cover-preview__close{position:absolute;top:-18px;right:-18px;width:44px;height:44px;border:3px solid #000;
+      border-radius:50%;background:#fff;color:#111;font:900 25px/1 system-ui;cursor:pointer;box-shadow:4px 4px 0 #4a9ad4}
+    .cover-preview__hint{margin:0;padding:4px 12px;background:#0b1420e8;color:#fff;border:1px solid #ffffff5c;
+      font-size:13px;font-weight:800;letter-spacing:1px;text-align:center}
+    html.cover-hold-pending{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
     .bg-dots{position:fixed;inset:0;z-index:0;pointer-events:none;
       background-image:radial-gradient(circle,#00000010 1px,transparent 1.2px);background-size:14px 14px}
     a{color:#1d5a8f;font-weight:800}
@@ -172,6 +190,7 @@
     }
     @media(prefers-reduced-motion:reduce){
       html{scroll-behavior:auto}
+      .cover-preview,.cover-preview__panel{transition:none}
     }
   </style>
 </head>
@@ -217,6 +236,14 @@
     <span class="cover" style="--sx:5;--sy:4;--x:49.6%;--y:92.6%;--w:148px;--r:-2.8deg;--o:0.41"></span>
   </div>
   <div class="bg-dots" aria-hidden="true"></div>
+  <div class="cover-preview" id="coverPreview" role="dialog" aria-modal="true" aria-hidden="true"
+    aria-label="背景照片完整预览">
+    <div class="cover-preview__panel">
+      <button class="cover-preview__close" id="coverPreviewClose" type="button" aria-label="关闭照片预览">×</button>
+      <div class="cover-preview__photo" id="coverPreviewPhoto" role="img" aria-label="背景照片"></div>
+      <p class="cover-preview__hint" id="coverPreviewHint"></p>
+    </div>
+  </div>
   <nav class="topbar">
     <div class="wrap">
       <a class="logo" href="#">XIA<b>的小站</b></a>
@@ -623,6 +650,271 @@
         window.clearTimeout(resizeTimer);
         resizeTimer = window.setTimeout(applyCoverLayout, 120);
       }, { passive: true });
+    })();
+
+    /**
+     * 功能：初始化背景封面的延时完整预览交互。
+     * 原理：鼠标或手指坐标落入封面变换后的矩形范围时启动 2000ms 计时；
+     *       计时结束前持续校验目标未改变，随后把对应精灵图单元复制到固定最高层。
+     *       单张精灵图坐标公式为 X = sx / 7 × 100%，Y = sy / 4 × 100%。
+     */
+    (function initCoverPreview() {
+      var previewElement = document.getElementById('coverPreview');
+      var previewPhoto = document.getElementById('coverPreviewPhoto');
+      var previewHint = document.getElementById('coverPreviewHint');
+      var previewClose = document.getElementById('coverPreviewClose');
+      var covers = Array.prototype.slice.call(document.querySelectorAll('.bg-float .cover'));
+      if (!previewElement || !previewPhoto || !previewHint || !previewClose || !covers.length) return;
+
+      var previewDelayMs = 2000;
+      var moveCancelDistance = 14;
+      var hitPadding = 7;
+      var pendingTimer = 0;
+      var pendingCover = null;
+      var pendingInputMode = '';
+      var activeCover = null;
+      var activeInputMode = '';
+      var pointerX = 0;
+      var pointerY = 0;
+      var touchIdentifier = null;
+      var touchStartX = 0;
+      var touchStartY = 0;
+      var touchCurrentX = 0;
+      var touchCurrentY = 0;
+
+      /**
+       * 功能：判断坐标是否位于某张正在显示的封面范围内。
+       * 原理：使用 getBoundingClientRect 获取包含当前摆动变换后的外接矩形，
+       *       并增加少量容差，避免封面轻微运动导致长按误取消。
+       * @param {HTMLElement} cover 待检测的封面元素。
+       * @param {number} clientX 视口横坐标。
+       * @param {number} clientY 视口纵坐标。
+       * @returns {boolean} 坐标是否命中封面。
+       */
+      function isPointInsideCover(cover, clientX, clientY) {
+        if (!cover || cover.hidden) return false;
+        var rect = cover.getBoundingClientRect();
+        return clientX >= rect.left - hitPadding && clientX <= rect.right + hitPadding &&
+          clientY >= rect.top - hitPadding && clientY <= rect.bottom + hitPadding;
+      }
+
+      /**
+       * 功能：从 38 张背景封面中查找指定坐标命中的封面。
+       * @param {number} clientX 视口横坐标。
+       * @param {number} clientY 视口纵坐标。
+       * @returns {HTMLElement|null} 命中的封面，未命中则返回 null。
+       */
+      function findCoverAtPoint(clientX, clientY) {
+        for (var index = covers.length - 1; index >= 0; index--) {
+          if (isPointInsideCover(covers[index], clientX, clientY)) return covers[index];
+        }
+        return null;
+      }
+
+      /**
+       * 功能：清除尚未完成的两秒触发计时。
+       */
+      function cancelPendingPreview() {
+        window.clearTimeout(pendingTimer);
+        pendingTimer = 0;
+        pendingCover = null;
+        pendingInputMode = '';
+        document.documentElement.classList.remove('cover-hold-pending');
+      }
+
+      /**
+       * 功能：在页面最高层显示指定背景照片的完整画面。
+       * 原理：复制封面的精灵图行列坐标，不复制原封面的缩放、透明度和摆动变换，
+       *       因而预览保持 168:240 原比例且完全不透明。
+       * @param {HTMLElement} cover 需要预览的封面。
+       * @param {string} inputMode 触发方式，mouse 表示鼠标，touch 表示触摸。
+       */
+      function showCoverPreview(cover, inputMode) {
+        var spriteColumn = parseInt(cover.style.getPropertyValue('--sx'), 10) || 0;
+        var spriteRow = parseInt(cover.style.getPropertyValue('--sy'), 10) || 0;
+        var spriteX = spriteColumn / 7 * 100;
+        var spriteY = spriteRow / 4 * 100;
+        var coverNumber = covers.indexOf(cover) + 1;
+
+        activeCover = cover;
+        activeInputMode = inputMode;
+        previewPhoto.style.setProperty('--preview-sprite-x', spriteX.toFixed(4) + '%');
+        previewPhoto.style.setProperty('--preview-sprite-y', spriteY.toFixed(4) + '%');
+        previewPhoto.setAttribute('aria-label', '第 ' + coverNumber + ' 张背景照片');
+        previewHint.textContent = '第 ' + coverNumber + ' / ' + covers.length + ' 张 · ' +
+          (inputMode === 'touch' ? '松开手指即可收起' : '移开鼠标即可收起');
+        previewElement.classList.add('is-visible');
+        previewElement.setAttribute('aria-hidden', 'false');
+        cancelPendingPreview();
+      }
+
+      /**
+       * 功能：关闭当前完整照片预览并恢复页面交互。
+       */
+      function hideCoverPreview() {
+        previewElement.classList.remove('is-visible');
+        previewElement.setAttribute('aria-hidden', 'true');
+        activeCover = null;
+        activeInputMode = '';
+      }
+
+      /**
+       * 功能：两秒计时完成后复核指针仍在原封面上，再打开预览。
+       */
+      function activatePendingPreview() {
+        if (!pendingCover) return;
+        var pointX = pendingInputMode === 'touch' ? touchCurrentX : pointerX;
+        var pointY = pendingInputMode === 'touch' ? touchCurrentY : pointerY;
+        if (!isPointInsideCover(pendingCover, pointX, pointY)) {
+          cancelPendingPreview();
+          return;
+        }
+        showCoverPreview(pendingCover, pendingInputMode);
+      }
+
+      /**
+       * 功能：为新命中的封面启动两秒延时计时。
+       * @param {HTMLElement} cover 当前命中的封面。
+       * @param {string} inputMode 当前输入方式。
+       */
+      function startPreviewDelay(cover, inputMode) {
+        if (pendingCover === cover && pendingInputMode === inputMode) return;
+        cancelPendingPreview();
+        pendingCover = cover;
+        pendingInputMode = inputMode;
+        if (inputMode === 'touch') document.documentElement.classList.add('cover-hold-pending');
+        pendingTimer = window.setTimeout(activatePendingPreview, previewDelayMs);
+      }
+
+      /**
+       * 功能：处理桌面鼠标移动，维持、切换或取消悬停计时和预览。
+       * @param {PointerEvent} event 指针移动事件。
+       */
+      function handlePointerMove(event) {
+        if (event.pointerType && event.pointerType !== 'mouse') return;
+        pointerX = event.clientX;
+        pointerY = event.clientY;
+        var hoveredCover = findCoverAtPoint(pointerX, pointerY);
+
+        if (activeInputMode === 'mouse') {
+          if (hoveredCover !== activeCover) hideCoverPreview();
+          return;
+        }
+        if (hoveredCover) startPreviewDelay(hoveredCover, 'mouse');
+        else cancelPendingPreview();
+      }
+
+      /**
+       * 功能：鼠标离开窗口时立即取消计时并关闭鼠标预览。
+       */
+      function handlePointerLeave() {
+        cancelPendingPreview();
+        if (activeInputMode === 'mouse') hideCoverPreview();
+      }
+
+      /**
+       * 功能：根据记录的触点编号，在触点列表中找到同一根手指。
+       * @param {TouchList} touchList 当前触点列表。
+       * @returns {Touch|null} 匹配的触点，找不到则返回 null。
+       */
+      function findTrackedTouch(touchList) {
+        for (var index = 0; index < touchList.length; index++) {
+          if (touchList[index].identifier === touchIdentifier) return touchList[index];
+        }
+        return null;
+      }
+
+      /**
+       * 功能：手指按到背景封面时记录起点并启动两秒长按计时。
+       * @param {TouchEvent} event 触摸开始事件。
+       */
+      function handleTouchStart(event) {
+        if (event.touches.length !== 1 || activeCover) return;
+        var touch = event.touches[0];
+        var touchedCover = findCoverAtPoint(touch.clientX, touch.clientY);
+        if (!touchedCover) return;
+
+        touchIdentifier = touch.identifier;
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+        touchCurrentX = touch.clientX;
+        touchCurrentY = touch.clientY;
+        startPreviewDelay(touchedCover, 'touch');
+      }
+
+      /**
+       * 功能：长按过程中监测移动距离，超过阈值则视为页面滚动并取消预览。
+       * 原理：移动距离 d = √((x-x0)² + (y-y0)²)，当 d > 14px 时取消。
+       * @param {TouchEvent} event 触摸移动事件。
+       */
+      function handleTouchMove(event) {
+        if (touchIdentifier === null) return;
+        var touch = findTrackedTouch(event.touches);
+        if (!touch) return;
+        touchCurrentX = touch.clientX;
+        touchCurrentY = touch.clientY;
+        var deltaX = touchCurrentX - touchStartX;
+        var deltaY = touchCurrentY - touchStartY;
+        var distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        if (distance <= moveCancelDistance) return;
+
+        cancelPendingPreview();
+        if (activeInputMode === 'touch') hideCoverPreview();
+        touchIdentifier = null;
+      }
+
+      /**
+       * 功能：手指松开或触摸被系统取消时结束本次长按，并收起触摸预览。
+       * @param {TouchEvent} event 触摸结束事件。
+       */
+      function handleTouchEnd(event) {
+        if (touchIdentifier === null) return;
+        var wasTouchPreviewVisible = activeInputMode === 'touch';
+        cancelPendingPreview();
+        touchIdentifier = null;
+        if (wasTouchPreviewVisible) {
+          event.preventDefault();
+          hideCoverPreview();
+        }
+      }
+
+      /**
+       * 功能：阻止长按背景照片时弹出浏览器默认菜单。
+       * @param {MouseEvent} event 上下文菜单事件。
+       */
+      function handleContextMenu(event) {
+        if (pendingInputMode === 'touch' || activeInputMode === 'touch') event.preventDefault();
+      }
+
+      /**
+       * 功能：点击预览遮罩或关闭按钮时关闭完整照片。
+       * @param {MouseEvent} event 点击事件。
+       */
+      function handlePreviewClick(event) {
+        if (event.target === previewElement || event.target === previewClose) hideCoverPreview();
+      }
+
+      /**
+       * 功能：按下 Escape 键时关闭预览。
+       * @param {KeyboardEvent} event 键盘事件。
+       */
+      function handlePreviewKeydown(event) {
+        if (event.key === 'Escape') {
+          cancelPendingPreview();
+          hideCoverPreview();
+        }
+      }
+
+      document.addEventListener('pointermove', handlePointerMove, { passive: true });
+      document.addEventListener('mouseleave', handlePointerLeave);
+      window.addEventListener('blur', handlePointerLeave);
+      document.addEventListener('touchstart', handleTouchStart, { passive: true, capture: true });
+      document.addEventListener('touchmove', handleTouchMove, { passive: true, capture: true });
+      document.addEventListener('touchend', handleTouchEnd, { passive: false, capture: true });
+      document.addEventListener('touchcancel', handleTouchEnd, { passive: false, capture: true });
+      document.addEventListener('contextmenu', handleContextMenu, { capture: true });
+      document.addEventListener('keydown', handlePreviewKeydown);
+      previewElement.addEventListener('click', handlePreviewClick);
     })();
   </script>
 </body>

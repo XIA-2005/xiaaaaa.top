@@ -279,6 +279,43 @@
         });
       }, 1200);
     });
-    </script>
+      // 手机端重排：3列x7行稀疏网格，只显示21张，避免小屏严重重叠
+    var __origLayout = null;
+    function mobileCoverLayout() {
+      var imgs = document.querySelectorAll('.bg-float img');
+      if (window.innerWidth > 640) {
+        if (__origLayout) {
+          imgs.forEach(function (im, i) {
+            im.style.display = '';
+            im.style.setProperty('--x', __origLayout[i].x);
+            im.style.setProperty('--y', __origLayout[i].y);
+          });
+          __origLayout = null;
+        }
+        return;
+      }
+      if (!__origLayout) {
+        __origLayout = [...imgs].map(function (im) {
+          return { x: im.style.getPropertyValue('--x'), y: im.style.getPropertyValue('--y') };
+        });
+      }
+      var cols = 3, keep = 21;
+      var rows = Math.ceil(keep / cols);
+      for (var i = 0; i < imgs.length; i++) {
+        if (i < keep) {
+          var col = i % cols, row = Math.floor(i / cols);
+          var x = 4 + col * 42 + (Math.random() * 4 - 2);
+          var y = 2 + row * (94 / (rows - 1)) + (Math.random() * 2 - 1);
+          imgs[i].style.display = '';
+          imgs[i].style.setProperty('--x', x.toFixed(1) + '%');
+          imgs[i].style.setProperty('--y', Math.max(1, Math.min(95, y)).toFixed(1) + '%');
+        } else {
+          imgs[i].style.display = 'none';
+        }
+      }
+    }
+    mobileCoverLayout();
+    window.addEventListener('resize', mobileCoverLayout);
+  </script>
 </body>
 </html>

@@ -248,7 +248,7 @@
             <button class="feed-btn" id="feedBtn">🍚 投喂一次</button>
             <div>
               <div>已解锁 <span class="feed-count" id="feedCount">0</span> / <span id="feedTotal">16</span> 项战绩·成就</div>
-              <div class="feed-msg" id="feedMsg">每投喂一次，就揭晓一项怪马的胜利或荣誉。</div>
+              <div class="feed-msg" id="feedMsg">每投喂一次，就揭晓一项小栗帽的胜利或荣誉。</div>
             </div>
             <button class="reset-btn" id="resetBtn">↺ 重新解锁</button>
           </div>
@@ -373,7 +373,7 @@
         feedMsg.textContent = '全部荣誉解锁！';
         feedBtn.disabled = true;
       } else {
-        feedMsg.textContent = '每投喂一次，就揭晓一项怪马的胜利或荣誉。';
+        feedMsg.textContent = '每投喂一次，就揭晓一项小栗帽的胜利或荣誉。';
         feedBtn.disabled = false;
       }
     }
@@ -391,6 +391,28 @@
       renderFeed();
     });
     renderFeed();
+    // 彩蛋逻辑（不在页面文案中提示）
+    var eggBusy = false;
+    document.querySelectorAll('#feed .wins-img').forEach(function (fig) {
+      fig.style.cursor = 'pointer';
+      fig.addEventListener('click', function () {
+        if (eggBusy) return;
+        eggBusy = true;
+        unlocked = feedPool.length;
+        localStorage.setItem(WKEY, unlocked);
+        renderFeed();
+        var ov = document.createElement('div');
+        ov.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#05070acc;display:flex;align-items:center;justify-content:center';
+        ov.innerHTML = '<div style="color:#fff;font-size:32px;font-weight:900;letter-spacing:8px;text-shadow:0 0 22px #ffd76a">🎇解锁隐藏彩蛋🎇</div>';
+        document.documentElement.appendChild(ov);
+        document.body.style.filter = 'grayscale(1)';
+        setTimeout(function () {
+          ov.remove();
+          document.body.style.filter = '';
+          eggBusy = false;
+        }, 1000);
+      });
+    });
   </script>
 </body>
 </html>

@@ -124,8 +124,12 @@
     .honor-banner .hy{display:block;font-size:12px;letter-spacing:1px;opacity:.95;font-family:Consolas,monospace}
     .pop{animation:popIn .55s cubic-bezier(.2,.75,.25,1)}
     @keyframes popIn{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
-    .wins-img{margin:0;border:3px solid #000;box-shadow:8px 8px 0 #00000055;overflow:hidden;transform:rotate(1.5deg)}
+    .wins-col{display:flex;flex-direction:column;gap:18px}
+    .wins-img{margin:0;position:relative;border:3px solid #000;box-shadow:8px 8px 0 #00000055;overflow:hidden;background:#fff}
+    .wins-img.tilt-l{transform:rotate(-1.4deg)}
+    .wins-img.tilt-r{transform:rotate(1.2deg)}
     .wins-img img{display:block;width:100%;height:auto}
+    .wins-img figcaption{position:absolute;left:0;bottom:0;background:#141414d9;color:#fff;font-size:12px;padding:4px 10px;letter-spacing:1px}
     .wins-note{color:#77756d;font-size:13px;margin:14px 0 0}
     @media(max-width:860px){.feed-grid{grid-template-columns:1fr}}
 
@@ -251,7 +255,12 @@
           <div class="feed-stack" id="feedStack"></div>
           <p class="wins-note">※ 战绩与成就严格依据现实中赛马小栗帽（オグリキャップ）的历史记录整理。</p>
         </div>
-        <figure class="wins-img"><img src="assets/cg-thanks.webp" alt="800万部感謝 · 小栗帽" loading="lazy"></figure>
+        <div class="wins-col">
+          <figure class="wins-img"><img src="assets/cg-thanks.webp" alt="800万部感謝 · 小栗帽" loading="lazy"></figure>
+          <figure class="wins-img tilt-l"><img src="assets/race-arima.webp" alt="1988 有马纪念 · 奇迹的复活" loading="lazy"><figcaption>1988 有马纪念 · 奇迹的复活</figcaption></figure>
+          <figure class="wins-img tilt-r"><img src="assets/race-mile.webp" alt="1989 一哩冠军赛" loading="lazy"><figcaption>1989 一哩冠军赛</figcaption></figure>
+          <figure class="wins-img tilt-l"><img src="assets/race-tenno.webp" alt="1990 天皇赏·秋" loading="lazy"><figcaption>1990 天皇赏·秋</figcaption></figure>
+        </div>
       </div>
     </section>
 

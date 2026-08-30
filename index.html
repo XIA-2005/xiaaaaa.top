@@ -256,10 +256,10 @@
           <p class="wins-note">※ 战绩与成就严格依据现实中赛马小栗帽（オグリキャップ）的历史记录整理。</p>
         </div>
         <div class="wins-col">
-          <figure class="wins-img"><img src="assets/cg-thanks.webp" alt="800万部感謝 · 小栗帽" loading="lazy"></figure>
-          <figure class="wins-img tilt-l"><img src="assets/race-arima.webp" alt="1988 有马纪念 · 奇迹的复活" loading="lazy"><figcaption>1988 有马纪念 · 奇迹的复活</figcaption></figure>
-          <figure class="wins-img tilt-r"><img src="assets/race-mile.webp" alt="1989 一哩冠军赛" loading="lazy"><figcaption>1989 一哩冠军赛</figcaption></figure>
-          <figure class="wins-img tilt-l"><img src="assets/race-tenno.webp" alt="1990 天皇赏·秋" loading="lazy"><figcaption>1990 天皇赏·秋</figcaption></figure>
+          <figure class="wins-img"><img src="assets/cg-thanks.webp" alt="800万部感謝 · 小栗帽" width="1260" height="711" loading="lazy"></figure>
+          <figure class="wins-img tilt-l"><img src="assets/race-arima.webp" alt="1988 有马纪念 · 奇迹的复活" width="760" height="459" loading="lazy"><figcaption>1988 有马纪念 · 奇迹的复活</figcaption></figure>
+          <figure class="wins-img tilt-r"><img src="assets/race-mile.webp" alt="1989 一哩冠军赛" width="760" height="505" loading="lazy"><figcaption>1989 一哩冠军赛</figcaption></figure>
+          <figure class="wins-img tilt-l"><img src="assets/race-tenno.webp" alt="1990 天皇赏·秋" width="760" height="467" loading="lazy"><figcaption>1990 天皇赏·秋</figcaption></figure>
         </div>
       </div>
     </section>
@@ -413,6 +413,25 @@
         }, 1000);
       });
     });
+    // 防瞬移：布局稳定后把封面按百分比算好的位置固定成像素，页面高度变化不再影响它们
+    var coverPinned = false;
+    function pinCovers() {
+      if (window.innerWidth <= 640) { coverPinned = false; return; }
+      var layer = document.querySelector('.bg-float');
+      if (!layer) return;
+      var W = layer.clientWidth, H = layer.clientHeight;
+      layer.querySelectorAll('img').forEach(function (im) {
+        if (!im.dataset.pct) {
+          im.dataset.pct = im.style.getPropertyValue('--x') + '|' + im.style.getPropertyValue('--y');
+        }
+        var xy = im.dataset.pct.split('|');
+        im.style.setProperty('--x', (parseFloat(xy[0]) / 100 * W).toFixed(1) + 'px');
+        im.style.setProperty('--y', (parseFloat(xy[1]) / 100 * H).toFixed(1) + 'px');
+      });
+      coverPinned = true;
+    }
+    window.addEventListener('load', function () { setTimeout(pinCovers, 1300); });
+    window.addEventListener('resize', function () { setTimeout(pinCovers, 250); });
   </script>
 </body>
 </html>

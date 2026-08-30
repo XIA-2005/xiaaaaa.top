@@ -110,6 +110,22 @@
     .feed-img img{display:block;width:100%;height:auto}
     @media(max-width:860px){.feed-grid{grid-template-columns:1fr}}
 
+    /* 战绩 · 重赏列表 */
+    .wins-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:22px;align-items:start;margin-top:14px}
+    .wins{list-style:none;padding:0;margin:0}
+    .wins li{display:flex;align-items:center;gap:12px;padding:8px 4px;border-bottom:2px dashed var(--line)}
+    .wins li:last-child{border-bottom:none}
+    .grade{flex:none;font-weight:900;font-size:12px;letter-spacing:1px;padding:1px 10px;border:2px solid #000;color:#fff;min-width:40px;text-align:center}
+    .grade.gi{background:var(--red)}
+    .grade.gii{background:var(--navy)}
+    .grade.giii{background:#70747e}
+    .wname{font-weight:800;flex:1}
+    .wyears{font-family:Consolas,monospace;font-weight:900;color:#56544e}
+    .wins-img{margin:0;border:3px solid #000;box-shadow:8px 8px 0 #00000055;overflow:hidden;transform:rotate(1.5deg)}
+    .wins-img img{display:block;width:100%;height:auto}
+    .wins-note{color:#77756d;font-size:13px;margin:14px 0 0}
+    @media(max-width:860px){.wins-grid{grid-template-columns:1fr}}
+
     /* 链接 */
     .links{list-style:none;padding:0;margin:0}
     .links li{padding:10px 2px;border-bottom:2px dashed var(--line)}
@@ -173,7 +189,7 @@
     <div class="wrap">
       <a class="logo" href="#">XIA<b>的小站</b></a>
       <div class="topnav">
-        <a href="#projects">项目</a><a href="#articles">文章</a><a href="#feed">食堂</a><a href="#links">链接</a>
+        <a href="#projects">项目</a><a href="#articles">文章</a><a href="#wins">战绩</a><a href="#links">链接</a>
       </div>
     </div>
   </nav>
@@ -217,18 +233,25 @@
       <div class="more"><a class="mini-btn plain" href="https://blog.csdn.net/Xjb200512?type=blog" target="_blank">更多文章 →</a></div>
     </section>
 
-    <section class="card" id="feed">
-      <span class="tab">食堂 · 投喂</span>
-      <div class="feed-grid">
-        <div class="feed-zone">
-          <button class="feed-btn" id="feedBtn">🍚 投喂一份饭</button>
-          <div>
-            <div>今天已经投喂 <span class="feed-count" id="feedCount">0</span> 份</div>
-            <div class="feed-msg" id="feedMsg">小栗帽正盯着饭碗等待中……</div>
-          </div>
-        </div>
-        <div class="feed-img"><img src="assets/cg-thanks.webp" alt="800万部感謝 · 小栗帽"></div>
+    <section class="card" id="wins">
+      <span class="tab">战绩 · 重赏制霸</span>
+      <p style="margin:6px 0 0;color:#56544e">现实中怪马小栗帽的重赏获胜记录——每一场都是从漫画里跑出来的传说。</p>
+      <div class="wins-grid">
+        <ul class="wins">
+          <li><span class="grade gi">GI</span><span class="wname">有马纪念</span><span class="wyears">1988 · 1990</span></li>
+          <li><span class="grade gi">GI</span><span class="wname">一哩冠军赛</span><span class="wyears">1989</span></li>
+          <li><span class="grade gi">GI</span><span class="wname">安田纪念</span><span class="wyears">1990</span></li>
+          <li><span class="grade gii">GII</span><span class="wname">新西兰杯四岁锦标</span><span class="wyears">1988</span></li>
+          <li><span class="grade gii">GII</span><span class="wname">高松宫杯</span><span class="wyears">1988</span></li>
+          <li><span class="grade gii">GII</span><span class="wname">每日王冠</span><span class="wyears">1988 · 1989</span></li>
+          <li><span class="grade giii">GIII</span><span class="wname">飞马锦标</span><span class="wyears">1988</span></li>
+          <li><span class="grade giii">GIII</span><span class="wname">每日杯</span><span class="wyears">1988</span></li>
+          <li><span class="grade giii">GIII</span><span class="wname">京都四岁特别</span><span class="wyears">1988</span></li>
+          <li><span class="grade giii">GIII</span><span class="wname">产经赏</span><span class="wyears">1989</span></li>
+        </ul>
+        <figure class="wins-img"><img src="assets/cg-thanks.webp" alt="800万部感謝 · 小栗帽" loading="lazy"></figure>
       </div>
+      <p class="wins-note">※ 严格依据现实中的赛马「小栗帽」（オグリキャップ）重赏获胜记录整理。</p>
     </section>
 
     <section class="card" id="links">
@@ -250,27 +273,6 @@
   </footer>
 
   <script>
-    // 投喂计数（只存本机，不上传）
-    var feedLines = [
-      "小栗帽正盯着饭碗等待中……",
-      "啊呜——！好吃！",
-      "还要还要！再来一份！",
-      "这就是大胃王的实力！",
-      "吃得饱饱的，明天也全力奔跑！",
-      "投喂 +1，根性 +10！"
-    ];
-    var countEl = document.getElementById('feedCount');
-    var msgEl = document.getElementById('feedMsg');
-    var KEY = 'xiaaaaa_feed_' + new Date().toISOString().slice(0, 10);
-    var n = parseInt(localStorage.getItem(KEY) || '0', 10);
-    function render() {
-      countEl.textContent = n;
-      msgEl.textContent = n === 0 ? feedLines[0] : feedLines[Math.min(Math.ceil(n / 3), feedLines.length - 1)];
-    }
-    document.getElementById('feedBtn').addEventListener('click', function () {
-      n++; localStorage.setItem(KEY, n); render();
-    });
-    render();
     // 首屏渲染完成后，后台预热全部封面下载（滚动到哪都不空）
     window.addEventListener('load', function () {
       setTimeout(function () {

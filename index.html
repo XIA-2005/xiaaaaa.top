@@ -396,7 +396,8 @@
     /**
      * 功能：初始化稳定的背景封面层。
      * 原理：38 张封面共用一张精灵图，一次请求即可显示；封面按响应式等距网格定位，
-     * 每个网格单元只放一张图并预留摆动间隙。投喂列表增高时不重排，封面位置保持稳定。
+     * 网格从顶部横幅结束位置向下排列，每个单元只放一张图并预留摆动间隙。
+     * 投喂列表增高时不重排，封面位置保持稳定。
      */
     (function initCoverLayer() {
       var layer = document.querySelector('.bg-float');
@@ -409,6 +410,7 @@
       var lastViewportWidth = 0;
       var lastWasMobile = false;
       var lastColumnCount = 0;
+      var lastHeroCompact = false;
       var resizeTimer = 0;
       var coverRatio = 240 / 168;
 
@@ -525,22 +527,41 @@
       }
 
       /**
+       * 功能：获取背景封面网格在文档中的纵向起点。
+       * 原理：使用顶部横幅的文档底边作为起点，使首行封面位于横幅之后；
+       *       文档坐标 = 元素视口底边 + 当前滚动距离，并限制在背景图层高度内。
+       * @param {number} layerHeight 背景图层的稳定高度，单位为像素。
+       * @returns {number} 背景封面网格起点的文档纵坐标。
+       */
+      function getCoverLayoutTop(layerHeight) {
+        var hero = document.querySelector('.hero');
+        if (!hero) return 0;
+
+        var heroRect = hero.getBoundingClientRect();
+        var heroBottom = heroRect.bottom + window.scrollY;
+        return Math.min(layerHeight, Math.max(0, heroBottom));
+      }
+
+      /**
        * 功能：根据当前页面尺寸生成等距网格坐标，并把每张封面固定在单元格中心。
-       * 原理：单元格尺寸为 W/列数 × H/行数；若最后一行不足整列，则用该行实际数量
-       *       重新均分整行宽度。封面缩放上限同时受水平、垂直单元格及摆动间隙约束：
+       * 原理：网格高度为“页面稳定高度 - 横幅底边”，单元格尺寸为 W/列数 × H/行数；
+       *       若最后一行不足整列，则用该行实际数量重新均分整行宽度。
+       *       封面缩放上限同时受水平、垂直单元格及摆动间隙约束：
        *       scale ≤ (cellSize - 2 × sway - gap) / coverSize。
        */
       function applyCoverLayout() {
         var viewportWidth = document.documentElement.clientWidth || window.innerWidth;
         var layerWidth = layer.clientWidth || viewportWidth;
         var layerHeight = getStableLayerHeight();
+        var layoutTop = getCoverLayoutTop(layerHeight);
+        var layoutHeight = Math.max(1, layerHeight - layoutTop);
         var isMobile = viewportWidth <= 640;
         var mobileCount = 21;
         var visibleCount = isMobile ? mobileCount : covers.length;
         var columnCount = getCoverColumnCount(viewportWidth);
         var rowCount = Math.ceil(visibleCount / columnCount);
         var cellWidth = layerWidth / columnCount;
-        var cellHeight = layerHeight / rowCount;
+        var cellHeight = layoutHeight / rowCount;
         /* 桌面端相较旧版约放大 60%，同时保留平板与手机上的可读间距。 */
         var desiredScale = isMobile ? 0.86 : (viewportWidth < 900 ? 1.05 : (viewportWidth < 1280 ? 1.22 : 1.45));
         /* 手机端重点增强可见幅度；桌面端仅适度增加，仍远低于旧版随机乱摆范围。 */
@@ -570,7 +591,7 @@
           var itemsInRow = Math.min(columnCount, visibleCount - row * columnCount);
           var rowCellWidth = layerWidth / itemsInRow;
           var x = (column + 0.5) * rowCellWidth - displayW * 0.5;
-          var y = (row + 0.5) * cellHeight - displayH * 0.5;
+          var y = layoutTop + (row + 0.5) * cellHeight - displayH * 0.5;
 
           cover.style.setProperty('--w', displayW.toFixed(1) + 'px');
           cover.style.setProperty('--sprite-x', (spriteColumn / 7 * 100).toFixed(4) + '%');
@@ -583,6 +604,7 @@
         lastViewportWidth = viewportWidth;
         lastWasMobile = isMobile;
         lastColumnCount = columnCount;
+        lastHeroCompact = viewportWidth <= 860;
       }
 
       applyCoverLayout();
@@ -592,7 +614,9 @@
         var viewportWidth = document.documentElement.clientWidth || window.innerWidth;
         var isMobile = viewportWidth <= 640;
         var columnCount = getCoverColumnCount(viewportWidth);
-        var crossedBreakpoint = isMobile !== lastWasMobile || columnCount !== lastColumnCount;
+        var heroCompact = viewportWidth <= 860;
+        var crossedBreakpoint = isMobile !== lastWasMobile ||
+          columnCount !== lastColumnCount || heroCompact !== lastHeroCompact;
 
         if (!crossedBreakpoint && Math.abs(viewportWidth - lastViewportWidth) < 48) return;
 

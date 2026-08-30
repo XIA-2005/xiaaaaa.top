@@ -44,23 +44,12 @@
       50%{transform:translate3d(var(--move-x-2),var(--move-y-2),0) rotate(var(--angle-2))}
       75%{transform:translate3d(var(--move-x-3),var(--move-y-3),0) rotate(var(--angle-3))}
     }
-    /* 背景封面完整预览：固定在最高层，按 168:240 原比例显示单张精灵图区域。 */
-    .cover-preview{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;
-      padding:24px;background:#05070ad9;-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
-      opacity:0;visibility:hidden;pointer-events:none;
-      transition:opacity .22s ease,visibility 0s linear .22s}
-    .cover-preview.is-visible{opacity:1;visibility:visible;pointer-events:auto;transition-delay:0s}
-    .cover-preview__panel{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;
-      transform:translateY(18px) scale(.94);transition:transform .26s cubic-bezier(.2,.8,.2,1)}
-    .cover-preview.is-visible .cover-preview__panel{transform:none}
-    .cover-preview__photo{width:min(82vw,53.2vh,420px);aspect-ratio:168 / 240;border:4px solid #fff;
-      background:#fff url("assets/covers-sprite.webp") no-repeat;
-      background-size:800% 500%;background-position:var(--preview-sprite-x,0%) var(--preview-sprite-y,0%);
-      box-shadow:0 18px 60px #000000b8,10px 10px 0 #4a9ad4}
-    .cover-preview__close{position:absolute;top:-18px;right:-18px;width:44px;height:44px;border:3px solid #000;
-      border-radius:50%;background:#fff;color:#111;font:900 25px/1 system-ui;cursor:pointer;box-shadow:4px 4px 0 #4a9ad4}
-    .cover-preview__hint{margin:0;padding:4px 12px;background:#0b1420e8;color:#fff;border:1px solid #ffffff5c;
-      font-size:13px;font-weight:800;letter-spacing:1px;text-align:center}
+    /* 局部清晰封面：复制当前封面的原尺寸和原位置，盖到毛玻璃上方形成局部透明效果。 */
+    .cover-peek{position:fixed;z-index:49;display:block;pointer-events:none;opacity:0;
+      border:3px solid #000;box-shadow:6px 6px 0 #00000026;
+      background:url("assets/covers-sprite.webp") no-repeat;background-size:800% 500%;
+      transform-origin:center center;will-change:opacity;transition:opacity .2s ease}
+    .cover-peek.is-visible{opacity:1}
     html.cover-hold-pending{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
     .bg-dots{position:fixed;inset:0;z-index:0;pointer-events:none;
       background-image:radial-gradient(circle,#00000010 1px,transparent 1.2px);background-size:14px 14px}
@@ -109,9 +98,12 @@
        原理：背景封面的可见贡献约为“封面透明度 × (1 - 卡片不透明度)”。
        桌面端卡片使用约 80% 白色遮罩和 2px 轻模糊，让封面若隐若现且保持正文清晰。 */
     main{padding:56px 0 70px}
-    .card{position:relative;margin:0 0 30px;padding:30px;color:var(--ink);
+    .card{position:relative;isolation:isolate;margin:0 0 30px;padding:30px;color:var(--ink);
       background:#fdfcfacc;border:3px solid #000;box-shadow:10px 10px 0 #00000030;
       -webkit-backdrop-filter:blur(2px) saturate(.92);backdrop-filter:blur(2px) saturate(.92)}
+    .card > *{position:relative;z-index:1}
+    .card > .tab{position:absolute}
+    .card > .cover-peek{position:absolute;z-index:0}
     .tab{position:absolute;top:-19px;left:22px;background:var(--red);color:#fff;font-weight:900;font-size:17px;
       padding:6px 22px;border:3px solid #000;letter-spacing:2px;box-shadow:4px 4px 0 #00000088}
     ol,ul{padding-left:22px}
@@ -190,7 +182,7 @@
     }
     @media(prefers-reduced-motion:reduce){
       html{scroll-behavior:auto}
-      .cover-preview,.cover-preview__panel{transition:none}
+      .cover-peek{transition:none}
     }
   </style>
 </head>
@@ -236,14 +228,6 @@
     <span class="cover" style="--sx:5;--sy:4;--x:49.6%;--y:92.6%;--w:148px;--r:-2.8deg;--o:0.41"></span>
   </div>
   <div class="bg-dots" aria-hidden="true"></div>
-  <div class="cover-preview" id="coverPreview" role="dialog" aria-modal="true" aria-hidden="true"
-    aria-label="背景照片完整预览">
-    <div class="cover-preview__panel">
-      <button class="cover-preview__close" id="coverPreviewClose" type="button" aria-label="关闭照片预览">×</button>
-      <div class="cover-preview__photo" id="coverPreviewPhoto" role="img" aria-label="背景照片"></div>
-      <p class="cover-preview__hint" id="coverPreviewHint"></p>
-    </div>
-  </div>
   <nav class="topbar">
     <div class="wrap">
       <a class="logo" href="#">XIA<b>的小站</b></a>
@@ -653,18 +637,14 @@
     })();
 
     /**
-     * 功能：初始化背景封面的延时完整预览交互。
+     * 功能：初始化背景封面的延时局部清晰交互。
      * 原理：鼠标或手指坐标落入封面变换后的矩形范围时启动 2000ms 计时；
-     *       计时结束前持续校验目标未改变，随后把对应精灵图单元复制到固定最高层。
-     *       单张精灵图坐标公式为 X = sx / 7 × 100%，Y = sy / 4 × 100%。
+     *       计时结束前持续校验目标未改变，随后按原尺寸、原位置和原角度复制封面，
+     *       并把复制层放到毛玻璃上方，使该区域看起来临时变为透明。
      */
     (function initCoverPreview() {
-      var previewElement = document.getElementById('coverPreview');
-      var previewPhoto = document.getElementById('coverPreviewPhoto');
-      var previewHint = document.getElementById('coverPreviewHint');
-      var previewClose = document.getElementById('coverPreviewClose');
       var covers = Array.prototype.slice.call(document.querySelectorAll('.bg-float .cover'));
-      if (!previewElement || !previewPhoto || !previewHint || !previewClose || !covers.length) return;
+      if (!covers.length) return;
 
       var previewDelayMs = 2000;
       var moveCancelDistance = 14;
@@ -674,6 +654,7 @@
       var pendingInputMode = '';
       var activeCover = null;
       var activeInputMode = '';
+      var activePeek = null;
       var pointerX = 0;
       var pointerY = 0;
       var touchIdentifier = null;
@@ -723,37 +704,75 @@
       }
 
       /**
-       * 功能：在页面最高层显示指定背景照片的完整画面。
-       * 原理：复制封面的精灵图行列坐标，不复制原封面的缩放、透明度和摆动变换，
-       *       因而预览保持 168:240 原比例且完全不透明。
-       * @param {HTMLElement} cover 需要预览的封面。
+       * 功能：读取封面当前动画变换中的旋转角度。
+       * 原理：二维变换矩阵 matrix(a,b,c,d,tx,ty) 的旋转角 θ = atan2(b,a)。
+       * @param {HTMLElement} cover 需要读取的封面元素。
+       * @returns {number} 当前旋转角度，单位为度。
+       */
+      function getCoverRotation(cover) {
+        var transform = window.getComputedStyle(cover).transform;
+        if (!transform || transform === 'none') return 0;
+        var values = transform.slice(transform.indexOf('(') + 1, transform.lastIndexOf(')')).split(',');
+        if (!values || values.length < 4) return 0;
+        var matrixA = parseFloat(values[0]);
+        var matrixB = parseFloat(values[1]);
+        return Math.atan2(matrixB, matrixA) * 180 / Math.PI;
+      }
+
+      /**
+       * 功能：把指定封面以原尺寸、原位置和原角度显示到毛玻璃上方。
+       * 原理：封面的变换中心等于其外接矩形中心，因此复制层左上角为：
+       *       left = centerX - width / 2，top = centerY - height / 2；
+       *       再恢复当前旋转角即可与原封面视觉重合。
+       * @param {HTMLElement} cover 需要局部变清晰的封面。
        * @param {string} inputMode 触发方式，mouse 表示鼠标，touch 表示触摸。
        */
       function showCoverPreview(cover, inputMode) {
-        var spriteColumn = parseInt(cover.style.getPropertyValue('--sx'), 10) || 0;
-        var spriteRow = parseInt(cover.style.getPropertyValue('--sy'), 10) || 0;
-        var spriteX = spriteColumn / 7 * 100;
-        var spriteY = spriteRow / 4 * 100;
-        var coverNumber = covers.indexOf(cover) + 1;
+        var rect = cover.getBoundingClientRect();
+        var computedStyle = window.getComputedStyle(cover);
+        var coverWidth = cover.offsetWidth;
+        var coverHeight = cover.offsetHeight;
+        var centerX = rect.left + rect.width * 0.5;
+        var centerY = rect.top + rect.height * 0.5;
+        var rotation = getCoverRotation(cover);
+        var pointX = inputMode === 'touch' ? touchCurrentX : pointerX;
+        var pointY = inputMode === 'touch' ? touchCurrentY : pointerY;
+        var pointedElement = document.elementFromPoint(pointX, pointY);
+        var targetCard = pointedElement && pointedElement.closest ? pointedElement.closest('.card') : null;
+        var parentLeft = 0;
+        var parentTop = 0;
+        var peek = document.createElement('span');
+
+        if (targetCard) {
+          var cardRect = targetCard.getBoundingClientRect();
+          parentLeft = cardRect.left + targetCard.clientLeft;
+          parentTop = cardRect.top + targetCard.clientTop;
+        }
+
+        peek.className = 'cover-peek';
+        peek.setAttribute('aria-hidden', 'true');
+        peek.style.left = (centerX - parentLeft - coverWidth * 0.5).toFixed(2) + 'px';
+        peek.style.top = (centerY - parentTop - coverHeight * 0.5).toFixed(2) + 'px';
+        peek.style.width = coverWidth.toFixed(2) + 'px';
+        peek.style.height = coverHeight.toFixed(2) + 'px';
+        peek.style.backgroundPosition = computedStyle.backgroundPosition;
+        peek.style.transform = 'rotate(' + rotation.toFixed(3) + 'deg)';
+        (targetCard || document.body).appendChild(peek);
 
         activeCover = cover;
         activeInputMode = inputMode;
-        previewPhoto.style.setProperty('--preview-sprite-x', spriteX.toFixed(4) + '%');
-        previewPhoto.style.setProperty('--preview-sprite-y', spriteY.toFixed(4) + '%');
-        previewPhoto.setAttribute('aria-label', '第 ' + coverNumber + ' 张背景照片');
-        previewHint.textContent = '第 ' + coverNumber + ' / ' + covers.length + ' 张 · ' +
-          (inputMode === 'touch' ? '松开手指即可收起' : '移开鼠标即可收起');
-        previewElement.classList.add('is-visible');
-        previewElement.setAttribute('aria-hidden', 'false');
+        activePeek = peek;
+        peek.getBoundingClientRect();
+        peek.classList.add('is-visible');
         cancelPendingPreview();
       }
 
       /**
-       * 功能：关闭当前完整照片预览并恢复页面交互。
+       * 功能：移除局部清晰封面，让原位置重新恢复毛玻璃效果。
        */
       function hideCoverPreview() {
-        previewElement.classList.remove('is-visible');
-        previewElement.setAttribute('aria-hidden', 'true');
+        if (activePeek) activePeek.remove();
+        activePeek = null;
         activeCover = null;
         activeInputMode = '';
       }
@@ -887,15 +906,7 @@
       }
 
       /**
-       * 功能：点击预览遮罩或关闭按钮时关闭完整照片。
-       * @param {MouseEvent} event 点击事件。
-       */
-      function handlePreviewClick(event) {
-        if (event.target === previewElement || event.target === previewClose) hideCoverPreview();
-      }
-
-      /**
-       * 功能：按下 Escape 键时关闭预览。
+       * 功能：按下 Escape 键时恢复毛玻璃效果。
        * @param {KeyboardEvent} event 键盘事件。
        */
       function handlePreviewKeydown(event) {
@@ -903,6 +914,14 @@
           cancelPendingPreview();
           hideCoverPreview();
         }
+      }
+
+      /**
+       * 功能：页面滚动或尺寸变化时移除复制层，防止其偏离原封面位置。
+       */
+      function handleViewportChange() {
+        cancelPendingPreview();
+        hideCoverPreview();
       }
 
       document.addEventListener('pointermove', handlePointerMove, { passive: true });
@@ -914,7 +933,8 @@
       document.addEventListener('touchcancel', handleTouchEnd, { passive: false, capture: true });
       document.addEventListener('contextmenu', handleContextMenu, { capture: true });
       document.addEventListener('keydown', handlePreviewKeydown);
-      previewElement.addEventListener('click', handlePreviewClick);
+      window.addEventListener('scroll', handleViewportChange, { passive: true });
+      window.addEventListener('resize', handleViewportChange, { passive: true });
     })();
   </script>
 </body>

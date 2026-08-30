@@ -87,17 +87,20 @@
       .btn{width:100%}
     }
 
-    /* ===== 漫画格区块：使用高不透明底色，避免滚动时大面积实时毛玻璃重绘 ===== */
+    /* ===== 漫画格区块：轻量毛玻璃 =====
+       原理：背景封面的可见贡献约为“封面透明度 × (1 - 卡片不透明度)”。
+       桌面端卡片使用约 80% 白色遮罩和 2px 轻模糊，让封面若隐若现且保持正文清晰。 */
     main{padding:56px 0 70px}
     .card{position:relative;margin:0 0 30px;padding:30px;color:var(--ink);
-      background:#fdfcfaf2;border:3px solid #000;box-shadow:10px 10px 0 #00000030}
+      background:#fdfcfacc;border:3px solid #000;box-shadow:10px 10px 0 #00000030;
+      -webkit-backdrop-filter:blur(2px) saturate(.92);backdrop-filter:blur(2px) saturate(.92)}
     .tab{position:absolute;top:-19px;left:22px;background:var(--red);color:#fff;font-weight:900;font-size:17px;
       padding:6px 22px;border:3px solid #000;letter-spacing:2px;box-shadow:4px 4px 0 #00000088}
     ol,ul{padding-left:22px}
     code{padding:2px 6px;border-radius:4px;background:#ecebe4;font-family:Consolas,monospace}
 
     /* 项目 */
-    .project{margin-top:14px;padding:18px 20px;border:2px solid #000;background:#fff}
+    .project{margin-top:14px;padding:18px 20px;border:2px solid #000;background:#ffffffe0}
     .project b{font-size:17px}
     .project p{margin:5px 0 0;color:#56544e;font-size:15px}
     .tags{margin:10px 0 0;display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0}
@@ -134,7 +137,7 @@
     .grade.gi{background:var(--red)}
     .grade.gii{background:var(--navy)}
     .grade.giii{background:#70747e}
-    .race-row{display:flex;align-items:center;gap:12px;padding:8px 12px;border:2px solid #000;background:#fff;box-shadow:4px 4px 0 #00000026}
+    .race-row{display:flex;align-items:center;gap:12px;padding:8px 12px;border:2px solid #000;background:#ffffffdf;box-shadow:4px 4px 0 #00000026}
     .wname{font-weight:800;flex:1}
     .wyears{font-family:Consolas,monospace;font-weight:900;color:#56544e}
     .honor-banner{display:block;width:100%;padding:9px 14px;text-align:center;font-weight:900;color:#fff;
@@ -164,7 +167,8 @@
       .card{padding:22px}
     }
     @media(max-width:640px){
-      .card{background:#fdfcfaf5}
+      /* 手机端进一步降低白色遮罩至约 76%，以较小模糊换取更好的滚动性能。 */
+      .card{background:#fdfcfac2;-webkit-backdrop-filter:blur(1.5px) saturate(.92);backdrop-filter:blur(1.5px) saturate(.92)}
     }
     @media(prefers-reduced-motion:reduce){
       html{scroll-behavior:auto}

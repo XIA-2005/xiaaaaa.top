@@ -15,29 +15,29 @@
     *{box-sizing:border-box}html{scroll-behavior:smooth}
     body{margin:0;background:var(--paper);color:var(--ink);position:relative;
       font:16px/1.85 "PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif}
-    /* 背景封面：38 张图片共用精灵图；所有动画变量均携带完整单位，保证 transform 在各浏览器中稳定生效 */
+    /* 背景封面：38 张图片共用精灵图，并沿统一的椭圆节拍轻缓摆动 */
     .bg-float{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
     .bg-float::after{content:"";position:absolute;inset:0;
       background:linear-gradient(180deg,#f4f2ec1f,#f4f2ec59 55%,#f4f2ec26)}
-    .cover{--move-x-0:-32px;--move-y-0:16px;--angle-0:-4deg;
-      --move-x-1:36px;--move-y-1:-24px;--angle-1:4deg;
-      --move-x-2:18px;--move-y-2:30px;--angle-2:2deg;
-      --move-x-3:-26px;--move-y-3:-18px;--angle-3:-3deg;
-      --dur:6.4s;--delay:0s;
+    .cover{--move-x-0:-12px;--move-y-0:0px;--angle-0:-1.2deg;
+      --move-x-1:0px;--move-y-1:-5px;--angle-1:0deg;
+      --move-x-2:12px;--move-y-2:0px;--angle-2:1.2deg;
+      --move-x-3:0px;--move-y-3:5px;--angle-3:0deg;
+      --dur:9.6s;--delay:0s;
       position:absolute;left:var(--x);top:var(--y);width:var(--w);height:auto;aspect-ratio:168 / 240;
       display:block;opacity:0;border:3px solid #000;box-shadow:6px 6px 0 #00000026;
       background:url("assets/covers-sprite.webp") no-repeat;
       background-size:800% 500%;background-position:var(--sprite-x,0%) var(--sprite-y,0%);
       transform-origin:center center;will-change:transform;
       transition:opacity .4s ease;
-      animation:coverSway var(--dur) ease-in-out var(--delay) infinite}
+      animation:coverSway var(--dur) cubic-bezier(.45,0,.55,1) var(--delay) infinite}
     .cover[hidden]{display:none}
     body.covers-ready .cover{opacity:var(--o)}
     @keyframes coverSway{
       0%,100%{transform:translate3d(var(--move-x-0),var(--move-y-0),0) rotate(var(--angle-0))}
-      27%{transform:translate3d(var(--move-x-1),var(--move-y-1),0) rotate(var(--angle-1))}
-      58%{transform:translate3d(var(--move-x-2),var(--move-y-2),0) rotate(var(--angle-2))}
-      82%{transform:translate3d(var(--move-x-3),var(--move-y-3),0) rotate(var(--angle-3))}
+      25%{transform:translate3d(var(--move-x-1),var(--move-y-1),0) rotate(var(--angle-1))}
+      50%{transform:translate3d(var(--move-x-2),var(--move-y-2),0) rotate(var(--angle-2))}
+      75%{transform:translate3d(var(--move-x-3),var(--move-y-3),0) rotate(var(--angle-3))}
     }
     .bg-dots{position:fixed;inset:0;z-index:0;pointer-events:none;
       background-image:radial-gradient(circle,#00000010 1px,transparent 1.2px);background-size:14px 14px}
@@ -495,53 +495,49 @@
       }
 
       /**
-       * 功能：生成指定闭区间内的随机数。
-       * 原理：Math.random() 产生 [0,1) 的均匀随机数，经区间长度缩放并叠加下限得到目标值：
-       *       随机值 = 最小值 + Math.random() × (最大值 - 最小值)。
-       * @param {number} minValue 随机区间下限。
-       * @param {number} maxValue 随机区间上限。
-       * @returns {number} 区间内的随机数。
-       */
-      function randomBetween(minValue, maxValue) {
-        return minValue + Math.random() * (maxValue - minValue);
-      }
-
-      /**
-       * 功能：为每张封面生成独立、明显且不同步的随机晃动轨迹。
-       * 原理：四个轨迹点在水平轴上交替分布于两侧，并随机改变纵向位移与旋转角；
-       *       每张封面再使用随机周期和负延迟，从而避免 38 张图片同方向、同节奏摆动。
+       * 功能：为每张封面设置轻缓、规律且呈波浪错开的摆动轨迹。
+       * 原理：轨迹取椭圆的四个等相位点 (-Ax,0)、(0,-Ay)、(Ax,0)、(0,Ay)，
+       *       其中 Ax、Ay 分别为水平和垂直振幅；各封面保持相同的 9.6 秒周期，
+       *       再依据行列坐标设置固定相位差，使整层像波浪一样有序传递而不完全同步。
        * @param {HTMLElement} cover 封面元素。
-       * @param {number} maxShift 单方向允许的最大平移像素。
+       * @param {number} index 封面序号。
+       * @param {number} columnCount 当前布局的列数。
+       * @param {number} swayX 水平方向单边振幅，单位为像素。
+       * @param {number} swayY 垂直方向单边振幅，单位为像素。
        */
-      function assignRandomSway(cover, maxShift) {
+      function assignRhythmicSway(cover, index, columnCount, swayX, swayY) {
         var baseRotation = parseFloat(cover.style.getPropertyValue('--r')) || 0;
-        var direction = Math.random() < 0.5 ? -1 : 1;
-        var rotateRange = randomBetween(4.8, 8.2);
+        var row = Math.floor(index / columnCount);
+        var column = index % columnCount;
+        var direction = row % 2 === 0 ? 1 : -1;
+        var rotateRange = Math.min(1.5, 0.9 + swayX * 0.035);
+        var duration = 9.6;
+        var phaseDelay = (column * 0.62 + row * 0.28) % duration;
         var waypoints = [
           {
-            x: direction * randomBetween(maxShift * 0.42, maxShift * 0.72),
-            y: randomBetween(-maxShift * 0.68, maxShift * 0.68),
+            x: -direction * swayX,
+            y: 0,
+            angle: baseRotation - direction * rotateRange
+          },
+          {
+            x: 0,
+            y: -swayY,
+            angle: baseRotation
+          },
+          {
+            x: direction * swayX,
+            y: 0,
             angle: baseRotation + direction * rotateRange
           },
           {
-            x: -direction * randomBetween(maxShift * 0.78, maxShift),
-            y: randomBetween(-maxShift, -maxShift * 0.42),
-            angle: baseRotation - direction * randomBetween(rotateRange * 0.72, rotateRange)
-          },
-          {
-            x: direction * randomBetween(maxShift * 0.58, maxShift * 0.92),
-            y: randomBetween(maxShift * 0.5, maxShift),
-            angle: baseRotation + direction * randomBetween(rotateRange * 0.35, rotateRange * 0.78)
-          },
-          {
-            x: -direction * randomBetween(maxShift * 0.45, maxShift * 0.82),
-            y: randomBetween(-maxShift * 0.75, maxShift * 0.75),
-            angle: baseRotation - direction * randomBetween(rotateRange * 0.38, rotateRange * 0.84)
+            x: 0,
+            y: swayY,
+            angle: baseRotation
           }
         ];
 
-        cover.style.setProperty('--dur', randomBetween(5.2, 8.8).toFixed(2) + 's');
-        cover.style.setProperty('--delay', (-randomBetween(0, 8.8)).toFixed(2) + 's');
+        cover.style.setProperty('--dur', duration.toFixed(1) + 's');
+        cover.style.setProperty('--delay', (-phaseDelay).toFixed(2) + 's');
         waypoints.forEach(function (point, pointIndex) {
           cover.style.setProperty('--move-x-' + pointIndex, point.x.toFixed(1) + 'px');
           cover.style.setProperty('--move-y-' + pointIndex, point.y.toFixed(1) + 'px');
@@ -563,7 +559,8 @@
         var boxes = [];
         /* 桌面端相较旧版约放大 60%，同时保留平板与手机上的可读间距。 */
         var scale = isMobile ? 0.86 : (viewportWidth < 900 ? 1.05 : (viewportWidth < 1280 ? 1.22 : 1.45));
-        var swayBudget = isMobile ? 18 : (viewportWidth < 900 ? 28 : (viewportWidth < 1280 ? 36 : 46));
+        var swayX = isMobile ? 7 : (viewportWidth < 900 ? 9 : (viewportWidth < 1280 ? 11 : 14));
+        var swayY = isMobile ? 3 : (viewportWidth < 900 ? 4 : (viewportWidth < 1280 ? 5 : 6));
 
         covers.forEach(function (cover, index) {
           if (isMobile && index >= mobileCount) {
@@ -596,12 +593,12 @@
           });
         });
 
-        separateBoxes(boxes, 10 + swayBudget * 2, layerWidth, layerHeight);
+        separateBoxes(boxes, 10 + swayX * 2, layerWidth, layerHeight);
 
         boxes.forEach(function (box) {
           box.el.style.setProperty('--x', box.x.toFixed(1) + 'px');
           box.el.style.setProperty('--y', box.y.toFixed(1) + 'px');
-          assignRandomSway(box.el, swayBudget);
+          assignRhythmicSway(box.el, box.index, isMobile ? mobileColumns : 5, swayX, swayY);
         });
 
         lastViewportWidth = viewportWidth;

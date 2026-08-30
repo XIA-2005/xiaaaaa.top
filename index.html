@@ -24,10 +24,10 @@
     .bg-float{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
     .bg-float::after{content:"";position:absolute;inset:0;
       background:linear-gradient(180deg,#f4f2ec1f,#f4f2ec59 55%,#f4f2ec26)}
-    .cover{--move-x-0:-12px;--move-y-0:0px;--angle-0:-1.2deg;
-      --move-x-1:0px;--move-y-1:-5px;--angle-1:0deg;
-      --move-x-2:12px;--move-y-2:0px;--angle-2:1.2deg;
-      --move-x-3:0px;--move-y-3:5px;--angle-3:0deg;
+    .cover{--move-x-0:-16px;--move-y-0:0px;--angle-0:-1.4deg;
+      --move-x-1:0px;--move-y-1:-7px;--angle-1:0deg;
+      --move-x-2:16px;--move-y-2:0px;--angle-2:1.4deg;
+      --move-x-3:0px;--move-y-3:7px;--angle-3:0deg;
       --dur:9.6s;--delay:0s;
       position:absolute;left:var(--x);top:var(--y);width:var(--w);height:auto;aspect-ratio:168 / 240;
       display:block;opacity:0;border:3px solid #000;box-shadow:6px 6px 0 #00000026;
@@ -543,8 +543,9 @@
         var cellHeight = layerHeight / rowCount;
         /* 桌面端相较旧版约放大 60%，同时保留平板与手机上的可读间距。 */
         var desiredScale = isMobile ? 0.86 : (viewportWidth < 900 ? 1.05 : (viewportWidth < 1280 ? 1.22 : 1.45));
-        var swayX = isMobile ? 7 : (viewportWidth < 900 ? 9 : (viewportWidth < 1280 ? 11 : 14));
-        var swayY = isMobile ? 3 : (viewportWidth < 900 ? 4 : (viewportWidth < 1280 ? 5 : 6));
+        /* 手机端重点增强可见幅度；桌面端仅适度增加，仍远低于旧版随机乱摆范围。 */
+        var swayX = isMobile ? 13 : (viewportWidth < 900 ? 15 : (viewportWidth < 1280 ? 17 : 19));
+        var swayY = isMobile ? 6 : (viewportWidth < 900 ? 7 : (viewportWidth < 1280 ? 8 : 9));
         var horizontalGap = isMobile ? 16 : 24;
         var verticalGap = isMobile ? 20 : 30;
         var widestOriginalCover = Math.max.apply(null, originalWidths);

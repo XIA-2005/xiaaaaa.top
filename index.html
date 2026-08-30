@@ -386,23 +386,20 @@
     });
     /**
      * 功能：初始化稳定的背景封面层。
-     * 原理：38 张封面共用一张精灵图，一次请求即可显示。坐标先换成像素再做互斥推开，
-     * 晃动幅度不超过剩余间隙，因此不会重叠。投喂列表增高时不再重排，封面位置保持稳定。
+     * 原理：38 张封面共用一张精灵图，一次请求即可显示；封面按响应式等距网格定位，
+     * 每个网格单元只放一张图并预留摆动间隙。投喂列表增高时不重排，封面位置保持稳定。
      */
     (function initCoverLayer() {
       var layer = document.querySelector('.bg-float');
       if (!layer) return;
 
       var covers = Array.prototype.slice.call(layer.querySelectorAll('.cover'));
-      var originalLayout = covers.map(function (cover) {
-        return {
-          x: parseFloat(cover.style.getPropertyValue('--x')) || 0,
-          y: parseFloat(cover.style.getPropertyValue('--y')) || 0,
-          w: parseFloat(cover.style.getPropertyValue('--w')) || 130
-        };
+      var originalWidths = covers.map(function (cover) {
+        return parseFloat(cover.style.getPropertyValue('--w')) || 130;
       });
       var lastViewportWidth = 0;
       var lastWasMobile = false;
+      var lastColumnCount = 0;
       var resizeTimer = 0;
       var coverRatio = 240 / 168;
 
@@ -451,47 +448,6 @@
         var dynamicFeedHeight = Math.max(0, feedGrid.offsetHeight - stableFeedHeight);
 
         return Math.max(window.innerHeight, pageHeight - dynamicFeedHeight);
-      }
-
-      /**
-       * 功能：把互相侵入最小间距的封面沿较短重叠轴推开，并限制在图层范围内。
-       * @param {Array<{x:number,y:number,w:number,h:number}>} boxes 封面矩形。
-       * @param {number} gap 矩形之间需保留的像素间距（已计入晃动幅度）。
-       * @param {number} layerWidth 图层宽度。
-       * @param {number} layerHeight 图层高度。
-       */
-      function separateBoxes(boxes, gap, layerWidth, layerHeight) {
-        var i, j, iter, moved;
-        for (iter = 0; iter < 18; iter += 1) {
-          moved = false;
-          for (i = 0; i < boxes.length; i += 1) {
-            for (j = i + 1; j < boxes.length; j += 1) {
-              var a = boxes[i];
-              var b = boxes[j];
-              var overlapX = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
-              var overlapY = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
-              if (overlapX <= -gap || overlapY <= -gap) continue;
-
-              var push = (Math.min(overlapX, overlapY) + gap) * 0.5;
-              if (overlapX < overlapY) {
-                var dirX = (a.x + a.w * 0.5) <= (b.x + b.w * 0.5) ? -1 : 1;
-                a.x += dirX * push;
-                b.x -= dirX * push;
-              } else {
-                var dirY = (a.y + a.h * 0.5) <= (b.y + b.h * 0.5) ? -1 : 1;
-                a.y += dirY * push;
-                b.y -= dirY * push;
-              }
-              moved = true;
-            }
-          }
-          if (!moved) break;
-        }
-
-        boxes.forEach(function (box) {
-          box.x = Math.min(Math.max(box.x, -box.w * 0.18), layerWidth - box.w * 0.82);
-          box.y = Math.min(Math.max(box.y, 4), layerHeight - box.h * 0.55);
-        });
       }
 
       /**
@@ -546,63 +502,77 @@
       }
 
       /**
-       * 功能：根据当前页面宽度生成确定性的封面坐标，推开重叠后固定为像素值。
+       * 功能：根据页面宽度选择背景封面的响应式列数。
+       * 原理：窄手机使用 2 列，普通手机和平板使用 3 列，普通桌面使用 4 列，
+       *       宽屏使用 5 列，确保每列始终有足够空间容纳封面和摆动包络。
+       * @param {number} viewportWidth 当前视口宽度，单位为像素。
+       * @returns {number} 当前布局应使用的列数。
+       */
+      function getCoverColumnCount(viewportWidth) {
+        if (viewportWidth <= 480) return 2;
+        if (viewportWidth < 900) return 3;
+        if (viewportWidth < 1200) return 4;
+        return 5;
+      }
+
+      /**
+       * 功能：根据当前页面尺寸生成等距网格坐标，并把每张封面固定在单元格中心。
+       * 原理：单元格尺寸为 W/列数 × H/行数；若最后一行不足整列，则用该行实际数量
+       *       重新均分整行宽度。封面缩放上限同时受水平、垂直单元格及摆动间隙约束：
+       *       scale ≤ (cellSize - 2 × sway - gap) / coverSize。
        */
       function applyCoverLayout() {
         var viewportWidth = document.documentElement.clientWidth || window.innerWidth;
         var layerWidth = layer.clientWidth || viewportWidth;
         var layerHeight = getStableLayerHeight();
         var isMobile = viewportWidth <= 640;
-        var mobileColumns = 3;
         var mobileCount = 21;
-        var mobileRows = Math.ceil(mobileCount / mobileColumns);
-        var boxes = [];
+        var visibleCount = isMobile ? mobileCount : covers.length;
+        var columnCount = getCoverColumnCount(viewportWidth);
+        var rowCount = Math.ceil(visibleCount / columnCount);
+        var cellWidth = layerWidth / columnCount;
+        var cellHeight = layerHeight / rowCount;
         /* 桌面端相较旧版约放大 60%，同时保留平板与手机上的可读间距。 */
-        var scale = isMobile ? 0.86 : (viewportWidth < 900 ? 1.05 : (viewportWidth < 1280 ? 1.22 : 1.45));
+        var desiredScale = isMobile ? 0.86 : (viewportWidth < 900 ? 1.05 : (viewportWidth < 1280 ? 1.22 : 1.45));
         var swayX = isMobile ? 7 : (viewportWidth < 900 ? 9 : (viewportWidth < 1280 ? 11 : 14));
         var swayY = isMobile ? 3 : (viewportWidth < 900 ? 4 : (viewportWidth < 1280 ? 5 : 6));
+        var horizontalGap = isMobile ? 16 : 24;
+        var verticalGap = isMobile ? 20 : 30;
+        var widestOriginalCover = Math.max.apply(null, originalWidths);
+        var tallestOriginalCover = widestOriginalCover * coverRatio;
+        var maxHorizontalScale = (cellWidth - swayX * 2 - horizontalGap) / widestOriginalCover;
+        var maxVerticalScale = (cellHeight - swayY * 2 - verticalGap) / tallestOriginalCover;
+        var scale = Math.max(0.62, Math.min(desiredScale, maxHorizontalScale, maxVerticalScale));
 
         covers.forEach(function (cover, index) {
-          if (isMobile && index >= mobileCount) {
+          if (index >= visibleCount) {
             cover.hidden = true;
             return;
           }
 
           cover.hidden = false;
-          var displayW = originalLayout[index].w * scale;
+          var displayW = originalWidths[index] * scale;
           var displayH = displayW * coverRatio;
           var spriteColumn = parseInt(cover.style.getPropertyValue('--sx'), 10) || 0;
           var spriteRow = parseInt(cover.style.getPropertyValue('--sy'), 10) || 0;
-          var xPercent = isMobile
-            ? 4 + (index % mobileColumns) * 42
-            : originalLayout[index].x;
-          var yPercent = isMobile
-            ? 2 + Math.floor(index / mobileColumns) * (91 / (mobileRows - 1))
-            : originalLayout[index].y;
+          var row = Math.floor(index / columnCount);
+          var column = index % columnCount;
+          var itemsInRow = Math.min(columnCount, visibleCount - row * columnCount);
+          var rowCellWidth = layerWidth / itemsInRow;
+          var x = (column + 0.5) * rowCellWidth - displayW * 0.5;
+          var y = (row + 0.5) * cellHeight - displayH * 0.5;
 
           cover.style.setProperty('--w', displayW.toFixed(1) + 'px');
           cover.style.setProperty('--sprite-x', (spriteColumn / 7 * 100).toFixed(4) + '%');
           cover.style.setProperty('--sprite-y', (spriteRow / 4 * 100).toFixed(4) + '%');
-          boxes.push({
-            el: cover,
-            index: index,
-            x: xPercent / 100 * layerWidth,
-            y: yPercent / 100 * layerHeight,
-            w: displayW,
-            h: displayH
-          });
-        });
-
-        separateBoxes(boxes, 10 + swayX * 2, layerWidth, layerHeight);
-
-        boxes.forEach(function (box) {
-          box.el.style.setProperty('--x', box.x.toFixed(1) + 'px');
-          box.el.style.setProperty('--y', box.y.toFixed(1) + 'px');
-          assignRhythmicSway(box.el, box.index, isMobile ? mobileColumns : 5, swayX, swayY);
+          cover.style.setProperty('--x', x.toFixed(1) + 'px');
+          cover.style.setProperty('--y', y.toFixed(1) + 'px');
+          assignRhythmicSway(cover, index, columnCount, swayX, swayY);
         });
 
         lastViewportWidth = viewportWidth;
         lastWasMobile = isMobile;
+        lastColumnCount = columnCount;
       }
 
       applyCoverLayout();
@@ -611,7 +581,8 @@
       window.addEventListener('resize', function () {
         var viewportWidth = document.documentElement.clientWidth || window.innerWidth;
         var isMobile = viewportWidth <= 640;
-        var crossedBreakpoint = isMobile !== lastWasMobile;
+        var columnCount = getCoverColumnCount(viewportWidth);
+        var crossedBreakpoint = isMobile !== lastWasMobile || columnCount !== lastColumnCount;
 
         if (!crossedBreakpoint && Math.abs(viewportWidth - lastViewportWidth) < 48) return;
 

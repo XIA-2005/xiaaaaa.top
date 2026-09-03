@@ -28,19 +28,30 @@
       <h1>预推免填表助手</h1>
       <p class="lead">辅助填写高校预推免、夏令营报名表。个人档案只保存在本机浏览器中，不自动提交，不处理验证码与登录密码。</p>
       <div class="actions">
-        <a class="btn primary" id="downloadButton" href="./tuimian-autofill-v2.0.2.zip" download="tuimian-autofill-v2.0.2.zip">⬇ 下载 v2.0.2 安装包</a>
+        <a class="btn primary" id="downloadButton" href="./tuimian-autofill-v2.0.4.zip" download="tuimian-autofill-v2.0.4.zip">⬇ 下载 v2.0.4 安装包</a>
         <a class="btn secondary" href="https://github.com/XIA-2005/tuimian-autofill">查看 GitHub 源码</a>
       </div>
       <div class="stats">
         <div class="stat"><div class="num" id="downloadCount" aria-label="累计下载次数">0</div><div class="label">GitHub Release 累计下载次数</div></div>
-        <div class="stat"><div class="num" id="releaseVersion">v2.0.2</div><div class="label">当前公开版本</div></div>
+        <div class="stat"><div class="num" id="releaseVersion">v2.0.4</div><div class="label">当前公开版本</div></div>
       </div>
       <p class="meta" id="statsStatus" aria-live="polite">正在读取 GitHub 真实下载量……</p>
-      <p class="meta">SHA-256：<code>3EA799AF5C94673F9B952E2AAF2FD56D8D7AC73638D368C3689B75D4C565023F</code></p>
+      <p class="meta">SHA-256：<code>72615009B8D5F1F15C9C5376A244A415C5439168156B7800855A1BD36F8B7996</code></p>
     </div>
   </header>
 
   <main class="wrap">
+    <section class="card">
+      <h2>v2.0.4 更新：南京航空航天大学多页个人信息采集</h2>
+      <ul>
+        <li>登录南航研究生报考服务系统并进入任一“个人信息”栏目后，可在悬浮面板点击“登录后会话爬取”。</li>
+        <li>仅以同源 HTTPS GET 读取“基本信息、家庭主要成员、学习信息、外语水平、学习和工作经历、学术成果、奖励情况”七页，并先给出合并预览。</li>
+        <li>不读取“申请信息”，也不会访问修改密码、登出、照片/材料上传页面；不会点击保存、下一步或提交。</li>
+        <li>只补充档案空值；已有不同值和锁定值保留原内容，家庭成员、外语、经历、成果和奖励去重后追加。</li>
+        <li>所有采集和合并均在浏览器本地完成，快照不保存南航动态令牌或完整账号专属网址。</li>
+      </ul>
+    </section>
+
     <section class="card upgrade" id="upgrade">
       <h2>已经安装过旧版本？这样升级不会丢个人档案</h2>
       <p class="must">最重要的两点：先导出 JSON 备份；不要在浏览器里删除旧扩展，也不要直接加载另一个位置的新 <code>dist</code> 文件夹。</p>
@@ -48,10 +59,10 @@
       <ol>
         <li><strong>先备份：</strong>打开旧版扩展 →“打开档案编辑器”→ 点击“导出 JSON 备份”，保存好 <code>tuimian-profile.json</code>。</li>
         <li><strong>保留旧扩展：</strong>打开 <code>edge://extensions</code> 或 <code>chrome://extensions</code>，不要点击“删除”。确认旧版当前加载的是哪个 <code>dist</code> 文件夹。</li>
-        <li><strong>解压新版：</strong>下载 v2.0.2 安装包并完整解压，在临时位置找到新版的 <code>dist</code> 文件夹。</li>
+        <li><strong>解压新版：</strong>下载 v2.0.4 安装包并完整解压，在临时位置找到新版的 <code>dist</code> 文件夹。</li>
         <li><strong>原目录覆盖：</strong>把新版 <code>dist</code> 里面的全部文件和子文件夹复制到旧版正在使用的那个 <code>dist</code> 目录中，选择“替换目标中的文件”。不要复制成 <code>旧 dist\dist</code> 的双层目录。</li>
         <li><strong>刷新扩展：</strong>回到扩展管理页，在“预推免填表助手”卡片上点击“重新加载/刷新”按钮；然后刷新已经打开的报名网页。</li>
-        <li><strong>检查完成：</strong>确认扩展管理页显示版本 <code>2.0.2</code>，再打开档案编辑器检查原有资料。若从 v1.x 升级，旧档案会自动迁移到 V2；请检查待分类内容并确认迁移，旧版四表备份仍会保留。</li>
+        <li><strong>检查完成：</strong>确认扩展管理页显示版本 <code>2.0.4</code>，再打开档案编辑器检查原有资料。若从 v1.x 升级，旧档案会自动迁移到 V2；请检查待分类内容并确认迁移，旧版四表备份仍会保留。</li>
       </ol>
       <div class="fallback"><strong>如果升级后看到空档案：</strong>先不要继续填写或删除旧文件。若你误删了旧扩展、换了目录或换了电脑，扩展 ID 可能已经改变；打开新版档案编辑器，点击“导入 JSON”，选择第 1 步导出的 <code>tuimian-profile.json</code>，确认内容无误后保存即可恢复。</div>
     </section>
@@ -86,6 +97,7 @@
         <li>点击扩展图标，打开档案编辑器并录入个人材料。</li>
         <li>人工登录目标学校报名系统，并人工完成验证码或短信验证。</li>
         <li>进入报名表页面，点击右侧悬浮面板中的“一键填充”。</li>
+        <li>在南航个人信息页面需要采集已有资料时，点击“登录后会话爬取”，核对预览后再确认合并。</li>
         <li>检查红色、黄色提示项，人工补全并核对。</li>
         <li>确认所有内容正确后，由你本人点击网站的提交按钮。</li>
       </ol>
@@ -98,6 +110,7 @@
         <li>个人档案保存于浏览器本地 <code>chrome.storage.local</code>。</li>
         <li>不会读取或填写密码、验证码、短信验证字段。</li>
         <li>不会上传个人档案；网页也没有接入第三方访客跟踪代码。</li>
+        <li>南航会话采集只读取七个白名单资料页；登录失效、栏目缺失或页面结构变化时会停止对应页面，不会误合并。</li>
         <li>安装包由本站直接提供，可使用页首 SHA-256 校验文件完整性。</li>
       </ul>
       <p><a href="https://github.com/XIA-2005/tuimian-autofill/blob/main/PRIVACY.md">查看完整隐私说明</a></p>
@@ -106,7 +119,7 @@
     <section class="card">
       <h2>常见问题</h2>
       <h3>扩展面板没有出现？</h3>
-      <p>浏览器内置页面（如 <code>edge://</code>）不允许扩展注入内容。请在普通网页中点击扩展图标，再选择“在当前页显示悬浮面板”。</p>
+      <p>请确认已经进入学校报名系统的普通报名页面，然后刷新该页面；如刚刚更新扩展，请先在扩展管理页点击“重新加载”，再刷新报名页面。</p>
       <h3>部分字段没有自动填写？</h3>
       <p>先检查档案中是否有对应内容。下拉框选项与档案不一致时，工具会保守跳过并标红，请人工选择。</p>
       <h3>如何反馈不支持的学校页面？</h3>

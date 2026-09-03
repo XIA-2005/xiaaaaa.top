@@ -16,6 +16,7 @@
     .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:34px}.stat{padding:20px;border:1px solid var(--line);border-radius:14px;background:#ffffffd9}.num{font-size:30px;font-weight:800}.label{color:var(--muted);font-size:14px}
     main{padding:42px 0 72px}.card{margin:0 0 20px;padding:26px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 6px 24px #152b5b0b}h2{margin:0 0 18px;font-size:25px}h3{margin:22px 0 7px;font-size:18px}
     ol,ul{padding-left:24px}code{padding:2px 6px;border-radius:5px;background:#eef2f7;font-family:Consolas,monospace}.notice{padding:15px 17px;border-left:4px solid var(--green);border-radius:8px;background:#eefaf5;color:#075d3b}.warn{border-left-color:#d97706;background:#fff8e8;color:#7c4700}
+    .upgrade{border-color:#f3ca78;background:linear-gradient(135deg,#fffdf7,#fff9e9)}.upgrade h2{color:#7c4700}.upgrade .must{font-weight:800;color:#a13f16}.upgrade .fallback{margin-top:16px;padding:14px 16px;border-radius:10px;background:#fff;border:1px dashed #d8a542}
     .meta{color:var(--muted);font-size:14px}.footer{padding:28px 0;border-top:1px solid var(--line);color:var(--muted);text-align:center;font-size:14px}
     @media(max-width:560px){.hero{padding-top:48px}.stats{grid-template-columns:1fr}.btn{width:100%}.card{padding:20px}}
   </style>
@@ -27,19 +28,34 @@
       <h1>预推免填表助手</h1>
       <p class="lead">辅助填写高校预推免、夏令营报名表。个人档案只保存在本机浏览器中，不自动提交，不处理验证码与登录密码。</p>
       <div class="actions">
-        <a class="btn primary" id="downloadButton" href="https://github.com/XIA-2005/tuimian-autofill/releases/download/v2.0.0/tuimian-autofill-v2.0.0.zip">⬇ 下载 v2.0.0 安装包</a>
+        <a class="btn primary" id="downloadButton" href="./tuimian-autofill-v2.0.1.zip" download="tuimian-autofill-v2.0.1.zip">⬇ 下载 v2.0.1 安装包</a>
         <a class="btn secondary" href="https://github.com/XIA-2005/tuimian-autofill">查看 GitHub 源码</a>
       </div>
       <div class="stats">
         <div class="stat"><div class="num" id="downloadCount" aria-label="累计下载次数">0</div><div class="label">GitHub Release 累计下载次数</div></div>
-        <div class="stat"><div class="num" id="releaseVersion">v2.0.0</div><div class="label">当前公开版本</div></div>
+        <div class="stat"><div class="num" id="releaseVersion">v2.0.1</div><div class="label">当前公开版本</div></div>
       </div>
       <p class="meta" id="statsStatus" aria-live="polite">正在读取 GitHub 真实下载量……</p>
-      <p class="meta">SHA-256：<code>EA520AE8B02EC0EC593A8F8D1D7ABF6C96215E24571C4943420AC8249746E8DD</code></p>
+      <p class="meta">SHA-256：<code>A90903BB7EE1C5B8597DE2A22FDC01EB9B20DD3F19CE0EF818BFEBE145B03BF0</code></p>
     </div>
   </header>
 
   <main class="wrap">
+    <section class="card upgrade" id="upgrade">
+      <h2>已经安装过旧版本？这样升级不会丢个人档案</h2>
+      <p class="must">最重要的两点：先导出 JSON 备份；不要在浏览器里删除旧扩展，也不要直接加载另一个位置的新 <code>dist</code> 文件夹。</p>
+      <p>个人档案保存在浏览器的 <code>chrome.storage.local</code> 中，并与扩展 ID 绑定。对“加载已解压扩展”的用户来说，继续使用原来的文件夹路径，才能让扩展 ID 保持不变并自动读取原档案。</p>
+      <ol>
+        <li><strong>先备份：</strong>打开旧版扩展 →“打开档案编辑器”→ 点击“导出 JSON 备份”，保存好 <code>tuimian-profile.json</code>。</li>
+        <li><strong>保留旧扩展：</strong>打开 <code>edge://extensions</code> 或 <code>chrome://extensions</code>，不要点击“删除”。确认旧版当前加载的是哪个 <code>dist</code> 文件夹。</li>
+        <li><strong>解压新版：</strong>下载 v2.0.1 安装包并完整解压，在临时位置找到新版的 <code>dist</code> 文件夹。</li>
+        <li><strong>原目录覆盖：</strong>把新版 <code>dist</code> 里面的全部文件和子文件夹复制到旧版正在使用的那个 <code>dist</code> 目录中，选择“替换目标中的文件”。不要复制成 <code>旧 dist\dist</code> 的双层目录。</li>
+        <li><strong>刷新扩展：</strong>回到扩展管理页，在“预推免填表助手”卡片上点击“重新加载/刷新”按钮；然后刷新已经打开的报名网页。</li>
+        <li><strong>检查完成：</strong>确认扩展管理页显示版本 <code>2.0.1</code>，再打开档案编辑器检查原有资料。若从 v1.x 升级，旧档案会自动迁移到 V2；请检查待分类内容并确认迁移，旧版四表备份仍会保留。</li>
+      </ol>
+      <div class="fallback"><strong>如果升级后看到空档案：</strong>先不要继续填写或删除旧文件。若你误删了旧扩展、换了目录或换了电脑，扩展 ID 可能已经改变；打开新版档案编辑器，点击“导入 JSON”，选择第 1 步导出的 <code>tuimian-profile.json</code>，确认内容无误后保存即可恢复。</div>
+    </section>
+
     <section class="card">
       <h2>安装教程</h2>
       <h3>1. 下载并解压</h3>
@@ -61,7 +77,7 @@
         <li>打开右上角“开发者模式”。</li>
         <li>点击“加载已解压的扩展程序”，选择 <code>dist</code> 文件夹。</li>
       </ol>
-      <div class="notice warn">更新版本前，请先在档案编辑器中导出 JSON 备份。安装新版本后可重新导入。</div>
+      <div class="notice warn">首次安装可直接按以上步骤操作；已经装过旧版本的用户，请严格按照上方“原目录覆盖”方法升级，避免扩展 ID 改变后看不到原档案。</div>
     </section>
 
     <section class="card">

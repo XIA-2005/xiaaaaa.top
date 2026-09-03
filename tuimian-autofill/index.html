@@ -28,27 +28,27 @@
       <h1>预推免填表助手</h1>
       <p class="lead">辅助填写高校预推免、夏令营报名表。个人档案只保存在本机浏览器中，不自动提交，不处理验证码与登录密码。</p>
       <div class="actions">
-        <a class="btn primary" id="downloadButton" href="./tuimian-autofill-v2.0.4.zip" download="tuimian-autofill-v2.0.4.zip">⬇ 下载 v2.0.4 安装包</a>
+        <a class="btn primary" id="downloadButton" href="./tuimian-autofill-v2.0.5.zip" download="tuimian-autofill-v2.0.5.zip">⬇ 下载 v2.0.5 安装包</a>
         <a class="btn secondary" href="https://github.com/XIA-2005/tuimian-autofill">查看 GitHub 源码</a>
       </div>
       <div class="stats">
         <div class="stat"><div class="num" id="downloadCount" aria-label="累计下载次数">0</div><div class="label">GitHub Release 累计下载次数</div></div>
-        <div class="stat"><div class="num" id="releaseVersion">v2.0.4</div><div class="label">当前公开版本</div></div>
+        <div class="stat"><div class="num" id="releaseVersion">v2.0.5</div><div class="label">当前公开版本</div></div>
       </div>
       <p class="meta" id="statsStatus" aria-live="polite">正在读取 GitHub 真实下载量……</p>
-      <p class="meta">SHA-256：<code>72615009B8D5F1F15C9C5376A244A415C5439168156B7800855A1BD36F8B7996</code></p>
+      <p class="meta">SHA-256：<code>ED9F91DF7065155AFF3854C1C2D043E4D88350D3EB671C40533062D34849F5B3</code></p>
     </div>
   </header>
 
   <main class="wrap">
     <section class="card">
-      <h2>v2.0.4 更新：南京航空航天大学多页个人信息采集</h2>
+      <h2>v2.0.5 更新：南航多页采集安全加固</h2>
       <ul>
-        <li>登录南航研究生报考服务系统并进入任一“个人信息”栏目后，可在悬浮面板点击“登录后会话爬取”。</li>
-        <li>仅以同源 HTTPS GET 读取“基本信息、家庭主要成员、学习信息、外语水平、学习和工作经历、学术成果、奖励情况”七页，并先给出合并预览。</li>
-        <li>不读取“申请信息”，也不会访问修改密码、登出、照片/材料上传页面；不会点击保存、下一步或提交。</li>
-        <li>只补充档案空值；已有不同值和锁定值保留原内容，家庭成员、外语、经历、成果和奖励去重后追加。</li>
-        <li>所有采集和合并均在浏览器本地完成，快照不保存南航动态令牌或完整账号专属网址。</li>
+        <li>南航七个个人信息栏目现在同时校验精确栏目名称、同源 HTTPS 和各栏目稳定路径；同名错误链接与删除、保存、提交等路径会在请求前拦截。</li>
+        <li>家庭成员与其他表格记录一样保留来源栏目、适配包、稳定记录 ID 和锁定状态，去重时不会覆盖已有成员。</li>
+        <li>七页必须全部成功才能进入合并确认；缺页、登录失效、结构变化或超时会逐项显示原因，并且不会写入个人档案。</li>
+        <li>仍然不读取“申请信息”，不会访问密码、登出、照片/材料上传页面，也不会点击保存、下一步或提交。</li>
+        <li>采集和合并全部在浏览器本地完成，脱敏快照不保存南航动态令牌、完整账号专属网址或原始网页 HTML。</li>
       </ul>
     </section>
 
@@ -59,10 +59,10 @@
       <ol>
         <li><strong>先备份：</strong>打开旧版扩展 →“打开档案编辑器”→ 点击“导出 JSON 备份”，保存好 <code>tuimian-profile.json</code>。</li>
         <li><strong>保留旧扩展：</strong>打开 <code>edge://extensions</code> 或 <code>chrome://extensions</code>，不要点击“删除”。确认旧版当前加载的是哪个 <code>dist</code> 文件夹。</li>
-        <li><strong>解压新版：</strong>下载 v2.0.4 安装包并完整解压，在临时位置找到新版的 <code>dist</code> 文件夹。</li>
+        <li><strong>解压新版：</strong>下载 v2.0.5 安装包并完整解压，在临时位置找到新版的 <code>dist</code> 文件夹。</li>
         <li><strong>原目录覆盖：</strong>把新版 <code>dist</code> 里面的全部文件和子文件夹复制到旧版正在使用的那个 <code>dist</code> 目录中，选择“替换目标中的文件”。不要复制成 <code>旧 dist\dist</code> 的双层目录。</li>
         <li><strong>刷新扩展：</strong>回到扩展管理页，在“预推免填表助手”卡片上点击“重新加载/刷新”按钮；然后刷新已经打开的报名网页。</li>
-        <li><strong>检查完成：</strong>确认扩展管理页显示版本 <code>2.0.4</code>，再打开档案编辑器检查原有资料。若从 v1.x 升级，旧档案会自动迁移到 V2；请检查待分类内容并确认迁移，旧版四表备份仍会保留。</li>
+        <li><strong>检查完成：</strong>确认扩展管理页显示版本 <code>2.0.5</code>，再打开档案编辑器检查原有资料。若从 v1.x 升级，旧档案会自动迁移到 V2；请检查待分类内容并确认迁移，旧版四表备份仍会保留。</li>
       </ol>
       <div class="fallback"><strong>如果升级后看到空档案：</strong>先不要继续填写或删除旧文件。若你误删了旧扩展、换了目录或换了电脑，扩展 ID 可能已经改变；打开新版档案编辑器，点击“导入 JSON”，选择第 1 步导出的 <code>tuimian-profile.json</code>，确认内容无误后保存即可恢复。</div>
     </section>
